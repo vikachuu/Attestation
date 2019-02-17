@@ -38,7 +38,7 @@ def post_to_db():
 
 @app.route("/")
 def enter_data():
-    return render_template("dataentry.html")
+    return "Hello world!!!!"
 
 
 if __name__ == ' __main__':
