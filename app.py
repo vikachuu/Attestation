@@ -1,6 +1,6 @@
 from shutil import copy
 
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import sys
 import json
@@ -39,6 +39,11 @@ def post_to_db():
 @app.route("/")
 def enter_data():
     return "Hello world!!!!"
+
+
+@app.route("/api/ping")
+def ping():
+    return jsonify({"status": 200, "msg":"This message is coming from Flask backend!"})
 
 
 if __name__ == ' __main__':
