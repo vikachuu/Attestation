@@ -15,7 +15,8 @@ class Authorization:
                     response_object = {
                         'status': 'success',
                         'message': 'Successfully logged in.',
-                        'Authorization': auth_token.decode()
+                        'token': auth_token.decode(),
+                        'access_level': user.access_level
                     }
                     return response_object, 200
             else:

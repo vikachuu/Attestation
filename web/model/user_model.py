@@ -16,14 +16,6 @@ class User(db.Model):
         self.password = flask_bcrypt.generate_password_hash(password).decode()
         self.access_level = access_level
 
-    # @property
-    # def password(self):
-    #     raise AttributeError('password: write-only field')
-    #
-    # @password.setter
-    # def password(self, password):
-    #     self.password = flask_bcrypt.generate_password_hash(password).decode('utf-8')
-
     def check_password(self, password):
         return flask_bcrypt.check_password_hash(self.password, password)
 
@@ -35,7 +27,7 @@ class User(db.Model):
         """
         try:
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1, seconds=5),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1, seconds=5),  #TODO: edit expiration date
                 'iat': datetime.datetime.utcnow(),
                 'sub': user_id
             }
