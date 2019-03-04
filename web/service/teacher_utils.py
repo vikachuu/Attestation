@@ -28,7 +28,7 @@ def requires_access_level(access_level):
                     'message': 'not authorized access'
                 }
                 return response_object, 401
-            return f(data)
+            return f(data, token)
         return decorated_function
     return decorator
 
