@@ -10,3 +10,9 @@ class Teacher(db.Model):
     def __init__(self, teacher_id, last_name):
         self.teacher_id = teacher_id
         self.last_name = last_name
+
+    def json(self):
+        return {
+            "teacher_id": self.teacher_id,
+            "last_name": self.last_name
+        }

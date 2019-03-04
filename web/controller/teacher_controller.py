@@ -8,5 +8,11 @@ class AddTeacher(Resource):
 
     def post(self):
         post_data = request.get_json()
-        # token = request.headers.get('token')
-        return TeacherUtils.create_teacher(post_data)
+        token = request.headers.get('token')
+        return TeacherUtils.create_teacher(post_data, token)
+
+
+class GetTeacherById(Resource):
+
+    def get(self, teacher_id):
+        return TeacherUtils.get_teacher_by_id(teacher_id)

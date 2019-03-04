@@ -17,13 +17,14 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 from web.controller.login_controller import UserLogin, UserRegister
 from web.controller.user_controller import UserController
-from web.controller.teacher_controller import AddTeacher
+from web.controller.teacher_controller import AddTeacher, GetTeacherById
 
 api.add_resource(UserController, '/api/user', endpoint='user')
 api.add_resource(UserLogin, '/api/login', endpoint='login')
 api.add_resource(UserRegister, '/api/register', endpoint='register')
 
 api.add_resource(AddTeacher, '/api/teacher', endpoint='teacher')
+api.add_resource(GetTeacherById, '/api/teacher/<teacher_id>', endpoint='teacher/<teacher_id>')
 
 
 @app.route("/")

@@ -1,4 +1,7 @@
+import json
 from functools import wraps
+
+from flask import jsonify
 
 from web import db
 from web.model.teacher_model import Teacher
@@ -33,9 +36,8 @@ def requires_access_level(access_level):
 class TeacherUtils:
 
     @staticmethod
-    # @requires_access_level(0)
-    def create_teacher(data):
-        print("teacher created")
+    @requires_access_level(0)
+    def create_teacher(data, token):
         teacher = Teacher.query.filter_by(teacher_id=data.get('teacher_id')).first()
         if not teacher:
             try:
@@ -63,5 +65,18 @@ class TeacherUtils:
             response_object = {
                 'status': 'fail',
                 'message': 'Teacher already exists.',
+            }
+            return response_object, 202
+
+    @staticmethod
+    def get_teacher_by_id(teacher_id):
+        teacher = Teacher.query.filter_by(teacher_id=teacher_id).first()  # TODO: query
+        print(type(teacher))
+        if teacher:
+            return teacher.json(), 200
+        else:
+            response_object = {
+                'status': 'fail',
+                'message': 'No teacher exists with such id.',
             }
             return response_object, 202
