@@ -35,7 +35,7 @@ class Authorization:
             return response_object, 500
 
 
-class Register():
+class Register:
     @staticmethod
     def register_user(data):
         # check if user already exists
@@ -49,7 +49,7 @@ class Register():
                 )
 
                 # insert the user
-                db.session.add(user)
+                db.session.add(user)  # TODO: insert user to table
                 db.session.commit()
                 # generate the auth token
                 auth_token = user.encode_auth_token(user.user_id)

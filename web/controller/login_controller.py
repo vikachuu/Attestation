@@ -1,7 +1,7 @@
 from flask import request
 from flask_restful import Resource
 
-from web.service.authorization import Authorization, Register
+from web.service.authorization_utils import Authorization, Register
 
 
 class UserLogin(Resource):

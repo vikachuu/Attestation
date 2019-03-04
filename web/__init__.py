@@ -17,21 +17,18 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 from web.controller.login_controller import UserLogin, UserRegister
 from web.controller.user_controller import UserController
+from web.controller.teacher_controller import AddTeacher
 
 api.add_resource(UserController, '/api/user', endpoint='user')
 api.add_resource(UserLogin, '/api/login', endpoint='login')
 api.add_resource(UserRegister, '/api/register', endpoint='register')
 
+api.add_resource(AddTeacher, '/api/teacher', endpoint='teacher')
+
 
 @app.route("/")
-# @cross_origin()
 def enter_data():
-    return "Hello world!!!!"
-
-
-# @app.route("/api/ping")
-# def ping():
-#     return jsonify({"status": 200, "msg": "This message is coming from Flask backend!"})
+    return "Hello to attestation!!!!"
 
 
 if __name__ == ' __main__':
