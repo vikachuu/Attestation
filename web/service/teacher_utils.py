@@ -36,7 +36,7 @@ def requires_access_level(access_level):
 class TeacherUtils:
 
     @staticmethod
-    @requires_access_level(0)
+    @requires_access_level(2)
     def create_teacher(data, token):
         teacher = Teacher.query.filter_by(teacher_id=data.get('teacher_id')).first()
         if not teacher:
