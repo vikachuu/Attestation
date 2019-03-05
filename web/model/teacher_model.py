@@ -26,7 +26,7 @@ class Teacher(db.Model):
     surname = db.Column(db.String(30), nullable=False)
     name = db.Column(db.String(30), nullable=False)
     middle_name = db.Column(db.String(30), nullable=False)
-    birth_date = db.Column(db.DateTime, nullable=False)
+    birth_date = db.Column(db.Date, nullable=False)
 
     educational_institution = db.Column(db.String(100), nullable=False)
     specialty = db.Column(db.String(100), nullable=False)
@@ -35,8 +35,8 @@ class Teacher(db.Model):
     position = db.Column(db.String(100), nullable=False)
     experience = db.Column(db.Integer, nullable=False)
 
-    qualification_category = db.Column(db.Enum(CATEGORY), nullable=False)
-    rank = db.Column(db.Enum(RANK), nullable=True)
+    qualification_category = db.Column(db.String(50), nullable=False)
+    rank = db.Column(db.String(50), nullable=True)
     previous_attestation_date = db.Column(db.Integer, nullable=False)
     next_attestation_date = db.Column(db.Integer, nullable=False)
     degree = db.Column(db.String(100), nullable=True)
@@ -51,7 +51,7 @@ class Teacher(db.Model):
         self.surname = surname
         self.name = name
         self.middle_name = middle_name
-        self.birth_date = datetime.strptime(birth_date, '%d/%m/%Y')
+        self.birth_date = datetime.strptime(birth_date, '%d/%m/%Y').date()
 
         self.educational_institution = educational_institution
         self.specialty = specialty
@@ -60,8 +60,8 @@ class Teacher(db.Model):
         self.position = position
         self.experience = experience
 
-        self.qualification_category = qualification_category
-        self.rank = rank
+        self.qualification_category = CATEGORY[qualification_category].value
+        self.rank = RANK[rank].value
         self.previous_attestation_date = previous_attestation_date
         self.next_attestation_date = next_attestation_date
         self.degree = degree
@@ -73,7 +73,7 @@ class Teacher(db.Model):
             'surname': self.surname,
             'name': self.name,
             'middle_name': self.middle_name,
-            'birth_date': datetime.strftime(self.birth_date, '%d/%m/%Y'),
+            'birth_date': self.birth_date.strftime('%d/%m/%Y'),
 
             'educational_institution': self.educational_institution,
             'specialty': self.specialty,
@@ -82,7 +82,7 @@ class Teacher(db.Model):
             'position': self.position,
             'experience': self.experience,
 
-            'qualification_category': "category will be here", # self.qualification_category,
+            'qualification_category': self.qualification_category,
             'rank': self.rank,
             'previous_attestation_date': self.previous_attestation_date,
             'next_attestation_date': self.next_attestation_date,
