@@ -51,7 +51,7 @@ class Teacher(db.Model):
         self.surname = surname
         self.name = name
         self.middle_name = middle_name
-        self.birth_date = datetime.strptime(birth_date, '%d/%m/%Y').date()
+        self.birth_date = datetime.strptime(birth_date, '%d/%m/%Y')
 
         self.educational_institution = educational_institution
         self.specialty = specialty
@@ -73,7 +73,7 @@ class Teacher(db.Model):
             'surname': self.surname,
             'name': self.name,
             'middle_name': self.middle_name,
-            'birth_date': self.birth_date,
+            'birth_date': datetime.strftime(self.birth_date, '%d/%m/%Y'),
 
             'educational_institution': self.educational_institution,
             'specialty': self.specialty,
@@ -82,7 +82,7 @@ class Teacher(db.Model):
             'position': self.position,
             'experience': self.experience,
 
-            'qualification_category': self.qualification_category,
+            'qualification_category': "category will be here", # self.qualification_category,
             'rank': self.rank,
             'previous_attestation_date': self.previous_attestation_date,
             'next_attestation_date': self.next_attestation_date,

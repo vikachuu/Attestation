@@ -102,8 +102,3 @@ class TeacherUtils:
             return [teacher.json() for teacher in teachers], 200
         else:
             return [], 200
-        #     response_object = {
-        #         'status': 'fail',
-        #         'message': 'Table teachers is empty.',  # TODO: empty or error? ever get here?
-        #     }
-        #     return response_object, 202
