@@ -7,8 +7,7 @@ class Authorization:
     @staticmethod
     def login_user(data):
         try:
-            # fetch the user data
-            user = User.query.filter_by(email=data.get('email')).first()  # TODO: write sql query and execute
+            user = User.query.filter_by(login=data.get('login')).first()  # TODO: write sql query and execute
             if user and user.check_password(data.get('password')):
                 auth_token = User.encode_auth_token(user.user_id)
                 if auth_token:
@@ -22,7 +21,7 @@ class Authorization:
             else:
                 response_object = {
                     'status': 'fail',
-                    'message': 'email or password does not match (no such user).'
+                    'message': 'login or password does not match (no such user).'
                 }
                 return response_object, 401
 
@@ -39,13 +38,14 @@ class Register:
     @staticmethod
     def register_user(data):
         # check if user already exists
-        user = User.query.filter_by(email=data.get('email')).first()
+        user = User.query.filter_by(login=data.get('login')).first()
         if not user:
             try:
                 user = User(
-                    email=data.get('email'),
+                    login=data.get('login'),
                     password=data.get('password'),
-                    access_level=data.get('access_level')
+                    access_level=data.get('access_level'),
+                    personnel_number=data.get('personnel_number')
                 )
 
                 # insert the user
@@ -53,21 +53,21 @@ class Register:
                 db.session.commit()
                 # generate the auth token
                 auth_token = user.encode_auth_token(user.user_id)
-                responseObject = {
+                response_object = {
                     'status': 'success',
                     'message': 'Successfully registered.',
                     'auth_token': auth_token.decode()
                 }
-                return responseObject, 201
+                return response_object, 201
             except Exception as e:
-                responseObject = {
+                response_object = {
                     'status': 'fail',
-                    'message': 'Some error occurred. Please try again.'
+                    'message': 'Some error occurred in register. Please try again. {}'.format(e)
                 }
-                return responseObject, 401
+                return response_object, 401
         else:
-            responseObject = {
+            response_object = {
                 'status': 'fail',
                 'message': 'User already exists. Please Log in.',
             }
-            return responseObject, 202
+            return response_object, 202

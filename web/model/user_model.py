@@ -7,14 +7,18 @@ class User(db.Model):
     __tablename__ = "user"
 
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(100))
-    access_level = db.Column(db.Integer)
+    login = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+    access_level = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, email, password, access_level=0):
-        self.email = email
+    personnel_number = db.Column(db.Integer, db.ForeignKey('teacher.personnel_number'), nullable=True)
+    teacher = db.relationship("Teacher", back_populates="user")
+
+    def __init__(self, login, password, access_level=0, personnel_number=None):
+        self.login = login
         self.password = flask_bcrypt.generate_password_hash(password).decode()
         self.access_level = access_level
+        self.personnel_number = personnel_number
 
     def check_password(self, password):
         return flask_bcrypt.check_password_hash(self.password, password)
@@ -27,7 +31,7 @@ class User(db.Model):
         """
         try:
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1, seconds=5),  #TODO: edit expiration date
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1, seconds=5),  # TODO: edit expiration date
                 'iat': datetime.datetime.utcnow(),
                 'sub': user_id
             }

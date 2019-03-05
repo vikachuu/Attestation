@@ -35,12 +35,29 @@ class TeacherUtils:
     @staticmethod
     @requires_access_level(2)
     def create_teacher(data, token):
-        teacher = Teacher.query.filter_by(teacher_id=data.get('teacher_id')).first()
+        teacher = Teacher.query.filter_by(personnel_number=data.get('personnel_number')).first()
         if not teacher:
             try:
                 teacher = Teacher(
-                    teacher_id=data.get('teacher_id'),
-                    last_name=data.get('last_name')
+                    personnel_number=data.get('personnel_number'),
+                    employment_history=data.get('employment_history'),
+                    surname=data.get('surname'),
+                    name=data.get('name'),
+                    middle_name=data.get('middle_name'),
+                    birth_date=data.get('birth_date'),
+
+                    educational_institution=data.get('educational_institution'),
+                    specialty=data.get('specialty'),
+                    accreditation_level=data.get('accreditation_level'),
+                    graduation_year=data.get('graduation_year'),
+                    position=data.get('position'),
+                    experience=data.get('experience'),
+
+                    qualification_category=data.get('qualification_category'),
+                    rank=data.get('rank'),
+                    previous_attestation_date=data.get('previous_attestation_date'),
+                    next_attestation_date=data.get('next_attestation_date'),
+                    degree=data.get('degree')
                 )
 
                 # insert the user
@@ -49,9 +66,9 @@ class TeacherUtils:
 
                 response_object = {
                     'status': 'success',
-                    'message': 'Successfully created teacher {}.'.format(teacher.last_name)
+                    'message': 'Successfully created teacher {}.'.format(teacher.surname)
                 }
-                return response_object, 201
+                return response_object, 200
             except Exception as e:
                 response_object = {
                     'status': 'fail',
@@ -66,8 +83,8 @@ class TeacherUtils:
             return response_object, 202
 
     @staticmethod
-    def get_teacher_by_id(teacher_id):
-        teacher = Teacher.query.filter_by(teacher_id=teacher_id).first()  # TODO: query
+    def get_teacher_by_id(personnel_number):
+        teacher = Teacher.query.filter_by(personnel_number=personnel_number).first()  # TODO: query
         print(type(teacher))
         if teacher:
             return teacher.json(), 200
