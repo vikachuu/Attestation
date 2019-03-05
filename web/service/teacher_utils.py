@@ -1,7 +1,4 @@
-import json
 from functools import wraps
-
-from flask import jsonify
 
 from web import db
 from web.model.teacher_model import Teacher
@@ -78,5 +75,17 @@ class TeacherUtils:
             response_object = {
                 'status': 'fail',
                 'message': 'No teacher exists with such id.',
+            }
+            return response_object, 202
+
+    @staticmethod
+    def get_all_teachers():
+        teachers = Teacher.query.all()
+        if teachers:
+            return [teacher.json() for teacher in teachers], 200
+        else:
+            response_object = {
+                'status': 'fail',
+                'message': 'Table teachers is empty.',  # TODO: empty or error? ever get here?
             }
             return response_object, 202

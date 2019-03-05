@@ -16,3 +16,9 @@ class GetTeacherById(Resource):
 
     def get(self, teacher_id):
         return TeacherUtils.get_teacher_by_id(teacher_id)
+
+
+class GetAllTeachers(Resource):
+
+    def get(self):
+        return TeacherUtils.get_all_teachers()
