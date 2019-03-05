@@ -100,9 +100,9 @@ class TeacherUtils:
         teachers = Teacher.query.all()
         if teachers:
             return [teacher.json() for teacher in teachers], 200
-        else:
-            response_object = {
-                'status': 'fail',
-                'message': 'Table teachers is empty.',  # TODO: empty or error? ever get here?
-            }
-            return response_object, 202
+        # else:
+        #     response_object = {
+        #         'status': 'fail',
+        #         'message': 'Table teachers is empty.',  # TODO: empty or error? ever get here?
+        #     }
+        #     return response_object, 202
