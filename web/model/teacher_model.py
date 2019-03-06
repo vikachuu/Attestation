@@ -60,8 +60,8 @@ class Teacher(db.Model):
         self.position = position
         self.experience = experience
 
-        self.qualification_category = CATEGORY[qualification_category].value
-        self.rank = RANK[rank].value
+        self.qualification_category = CATEGORY[qualification_category].value if qualification_category else None
+        self.rank = RANK[rank].value if rank else None
         self.previous_attestation_date = previous_attestation_date
         self.next_attestation_date = next_attestation_date
         self.degree = degree

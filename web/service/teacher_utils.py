@@ -37,7 +37,7 @@ class TeacherUtils:
     def create_teacher(data, token):
         teacher = Teacher.query.filter_by(personnel_number=data.get('personnel_number')).first()
         if not teacher:
-            try:
+            # try:
                 teacher = Teacher(
                     personnel_number=data.get('personnel_number'),
                     employment_history=data.get('employment_history'),
@@ -69,12 +69,12 @@ class TeacherUtils:
                     'message': 'Successfully created teacher {}.'.format(teacher.surname)
                 }
                 return response_object, 200
-            except Exception as e:
-                response_object = {
-                    'status': 'fail',
-                    'message': 'Error occurred creating teacher. Please try again. {}'.format(e)
-                }
-                return response_object, 401
+            # except Exception as e:
+            #     response_object = {
+            #         'status': 'fail',
+            #         'message': 'Error occurred creating teacher. Please try again. {}'.format(e)
+            #     }
+            #     return response_object, 401
         else:
             response_object = {
                 'status': 'fail',
