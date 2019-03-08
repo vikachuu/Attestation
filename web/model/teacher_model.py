@@ -51,7 +51,7 @@ class Teacher(db.Model):
         self.surname = surname
         self.name = name
         self.middle_name = middle_name
-        self.birth_date = datetime.strptime(birth_date, '%d/%m/%Y').date()
+        self.birth_date = datetime.strptime(birth_date, '%Y-%m-%d').date()
 
         self.educational_institution = educational_institution
         self.specialty = specialty
