@@ -51,15 +51,21 @@ class TeacherUtils:
 
     @staticmethod
     def get_teacher_by_id(personnel_number):
-        teacher = Teacher.query.filter_by(personnel_number=personnel_number).first()  # TODO: query
+        sql = """
+                SELECT *
+                FROM teacher
+                WHERE personnel_number=%s;
+                """
+        result = db.engine.execute(sql, (personnel_number,))
+        teacher = [dict(row) for row in result]
         if teacher:
-            return teacher.json(), 200
+            return jsonify(teacher[0])
         else:
             response_object = {
                 'status': 'fail',
                 'message': 'No teacher exists with such id.',
             }
-            return response_object, 202
+            return response_object
 
     @staticmethod
     def delete_teacher_by_id(personnel_number):
@@ -98,11 +104,12 @@ class TeacherUtils:
 
     @staticmethod
     def get_all_teachers():
-        teachers = Teacher.query.all()  # TODO: rewrite sql query
-        if teachers:
-            return [teacher.json() for teacher in teachers], 200
-        else:
-            return [], 200
+        sql = """
+        SELECT *
+        FROM teacher;
+        """
+        result = db.engine.execute(sql)
+        return jsonify([dict(row) for row in result])
 
     @staticmethod
     def get_filtered_teachers(filters):
