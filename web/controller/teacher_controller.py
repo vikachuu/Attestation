@@ -34,6 +34,10 @@ class TeacherById(Resource):
     def delete(self, teacher_id):
         return TeacherUtils.delete_teacher_by_id(teacher_id)
 
+    def put(self, teacher_id):
+        put_data = request.get_json()
+        return TeacherUtils.update_teacher_by_id(teacher_id, put_data)
+
 
 class GetAllTeachers(Resource):
 

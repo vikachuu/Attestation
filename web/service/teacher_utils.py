@@ -67,9 +67,29 @@ class TeacherUtils:
         DELETE FROM teacher
         WHERE personnel_number=%s;
         """
-        result = db.engine.execute(sql, (personnel_number, ))
-        print(result)
+        db.engine.execute(sql, (personnel_number, ))
         return {"message": "successfully deleted"}
+
+    @staticmethod
+    def update_teacher_by_id(personnel_number, update):
+        sql = """
+        UPDATE teacher
+        SET personnel_number=%s, employment_history=%s, surname=%s, name=%s, middle_name=%s, birth_date=%s,
+                 educational_institution=%s, specialty=%s, accreditation_level=%s, graduation_year=%s, position=%s, 
+                 experience=%s, qualification_category=%s, rank=%s, previous_attestation_date=%s, 
+                 next_attestation_date=%s, degree=%s
+        WHERE personnel_number=%s;
+        """
+        update_with = (update.get('personnel_number'), update.get('employment_history'), update.get('surname'),
+                       update.get('name'), update.get('middle_name'), update.get('birth_date'),
+                       update.get('educational_institution'), update.get('specialty'),
+                       update.get('accreditation_level'), update.get('graduation_year', None), update.get('position'),
+                       update.get('experience'), update.get('qualification_category'), update.get('rank', None),
+                       update.get('previous_attestation_date'), update.get('next_attestation_date'),
+                       update.get('degree', None),
+                       personnel_number)
+        db.engine.execute(sql, update_with)
+        return {"message": "successfully updated"}
 
     @staticmethod
     def get_all_teachers():
