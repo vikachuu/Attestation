@@ -118,7 +118,7 @@ class TeacherUtils:
 
         if qualification_category and rank:
             sql = """
-            SELECT *
+            SELECT personnel_number, surname, name, qualification_category, rank
             FROM teacher
             WHERE qualification_category=%s AND rank=%s;
             """
