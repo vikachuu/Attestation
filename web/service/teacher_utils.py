@@ -52,10 +52,10 @@ class TeacherUtils:
     @staticmethod
     def get_teacher_by_id(personnel_number):
         sql = """
-                SELECT *
-                FROM teacher
-                WHERE personnel_number=%s;
-                """
+        SELECT *
+        FROM teacher
+        WHERE personnel_number=%s;
+        """
         result = db.engine.execute(sql, (personnel_number,))
         teacher = [dict(row) for row in result]
         if teacher:
@@ -105,7 +105,7 @@ class TeacherUtils:
     @staticmethod
     def get_all_teachers():
         sql = """
-        SELECT *
+        SELECT personnel_number, surname, name, qualification_category, rank
         FROM teacher;
         """
         result = db.engine.execute(sql)
@@ -145,3 +145,14 @@ class TeacherUtils:
             result = db.engine.execute(sql)
 
         return jsonify([dict(row) for row in result])
+
+    @staticmethod
+    def if_teacher_exists(personnel_number):
+        sql = """
+        SELECT *
+        FROM teacher
+        WHERE personnel_number=%s;
+        """
+        result = db.engine.execute(sql, (personnel_number,))
+        teacher = [dict(row) for row in result]
+        return True if teacher else False
