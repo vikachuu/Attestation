@@ -12,7 +12,7 @@ class User(db.Model):
     access_level = db.Column(db.Integer, nullable=False)
 
     personnel_number = db.Column(db.Integer, db.ForeignKey('teacher.personnel_number'), nullable=True)
-    teacher = db.relationship("Teacher", back_populates="user")
+    teacher = db.relationship("Teacher", cascade="all, delete", back_populates="user")
 
     def __init__(self, login, password, access_level=0, personnel_number=None):
         self.login = login

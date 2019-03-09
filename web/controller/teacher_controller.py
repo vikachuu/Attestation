@@ -26,10 +26,13 @@ class AddTeacher(Resource):
             return create_teacher_response
 
 
-class GetTeacherById(Resource):
+class TeacherById(Resource):
 
     def get(self, teacher_id):
         return TeacherUtils.get_teacher_by_id(teacher_id)
+
+    def delete(self, teacher_id):
+        return TeacherUtils.delete_teacher_by_id(teacher_id)
 
 
 class GetAllTeachers(Resource):

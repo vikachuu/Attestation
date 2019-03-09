@@ -62,6 +62,16 @@ class TeacherUtils:
             return response_object, 202
 
     @staticmethod
+    def delete_teacher_by_id(personnel_number):
+        sql = """
+        DELETE FROM teacher
+        WHERE personnel_number=%s;
+        """
+        result = db.engine.execute(sql, (personnel_number, ))
+        print(result)
+        return {"message": "successfully deleted"}
+
+    @staticmethod
     def get_all_teachers():
         teachers = Teacher.query.all()
         if teachers:

@@ -41,7 +41,7 @@ class Teacher(db.Model):
     next_attestation_date = db.Column(db.Integer, nullable=False)
     degree = db.Column(db.String(100), nullable=True)
 
-    user = db.relationship("User", back_populates="teacher", uselist=False)
+    user = db.relationship("User", cascade="all, delete", back_populates="teacher", uselist=False)
 
     def __init__(self, personnel_number, employment_history, surname, name, middle_name, birth_date,
                  educational_institution, specialty, accreditation_level, graduation_year, position, experience,
