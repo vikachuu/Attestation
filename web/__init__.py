@@ -6,10 +6,8 @@ from flask_heroku import Heroku
 from flask_cors import CORS
 
 
-
 app = Flask(__name__)
 app.config.from_object('config')
-
 
 api = Api(app)
 db = SQLAlchemy(app)
@@ -17,7 +15,7 @@ flask_bcrypt = Bcrypt(app)
 heroku = Heroku(app)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-from web.service.teacher_utils import CustomJSONEncoder
+from web.service.utils import CustomJSONEncoder  # uses User model -> local import
 app.json_encoder = CustomJSONEncoder
 
 from web.controller.login_controller import UserLogin, UserRegister
