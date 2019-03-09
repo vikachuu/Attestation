@@ -1,6 +1,6 @@
 from flask import jsonify
 from web import db
-from web.model.teacher_model import Teacher
+from web.model.teacher_model import Teacher, CATEGORY, RANK
 from web.service.utils import requires_access_level
 
 
@@ -80,11 +80,16 @@ class TeacherUtils:
                  next_attestation_date=%s, degree=%s
         WHERE personnel_number=%s;
         """
+        qualification_category = update.get('qualification_category')
+        rank = update.get('rank')
+
         update_with = (update.get('personnel_number'), update.get('employment_history'), update.get('surname'),
                        update.get('name'), update.get('middle_name'), update.get('birth_date'),
                        update.get('educational_institution'), update.get('specialty'),
                        update.get('accreditation_level'), update.get('graduation_year', None), update.get('position'),
-                       update.get('experience'), update.get('qualification_category'), update.get('rank', None),
+                       update.get('experience'),
+                       CATEGORY[qualification_category].value,
+                       RANK[rank].value if rank else None,
                        update.get('previous_attestation_date'), update.get('next_attestation_date'),
                        update.get('degree', None),
                        personnel_number)
@@ -93,7 +98,7 @@ class TeacherUtils:
 
     @staticmethod
     def get_all_teachers():
-        teachers = Teacher.query.all()
+        teachers = Teacher.query.all()  # TODO: rewrite sql query
         if teachers:
             return [teacher.json() for teacher in teachers], 200
         else:
