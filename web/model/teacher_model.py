@@ -43,7 +43,7 @@ class Teacher(db.Model):
     avatar_url = db.Column(db.String(1000), nullable=True)
 
     user = db.relationship("User", back_populates="teacher", uselist=False)
-    attestation = db.relationship("Attestation", back_populates="attestation")
+    attestation = db.relationship("Attestation", back_populates="teacher")
 
     def __init__(self, personnel_number, employment_history, surname, name, middle_name, birth_date,
                  educational_institution, specialty, accreditation_level, graduation_year, position, experience,
