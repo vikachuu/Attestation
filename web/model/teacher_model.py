@@ -37,15 +37,17 @@ class Teacher(db.Model):
 
     qualification_category = db.Column(db.String(50), nullable=False)
     rank = db.Column(db.String(50), nullable=True)
-    previous_attestation_date = db.Column(db.Integer, nullable=False)
-    next_attestation_date = db.Column(db.Integer, nullable=False)
+    previous_attestation_date = db.Column(db.Integer, nullable=False)  # TODO: change Date
+    next_attestation_date = db.Column(db.Integer, nullable=False)  # TODO: change Date
     degree = db.Column(db.String(100), nullable=True)
+    avatar_url = db.Column(db.String(1000), nullable=True)
 
     user = db.relationship("User", back_populates="teacher", uselist=False)
+    attestation = db.relationship("Attestation", back_populates="attestation")
 
     def __init__(self, personnel_number, employment_history, surname, name, middle_name, birth_date,
                  educational_institution, specialty, accreditation_level, graduation_year, position, experience,
-                 qualification_category, rank, previous_attestation_date, next_attestation_date, degree):
+                 qualification_category, rank, previous_attestation_date, next_attestation_date, degree, avatar_url):
         self.personnel_number = personnel_number
         self.employment_history = employment_history
         self.surname = surname
@@ -65,6 +67,7 @@ class Teacher(db.Model):
         self.previous_attestation_date = previous_attestation_date
         self.next_attestation_date = next_attestation_date
         self.degree = degree
+        self.avatar_url = avatar_url
 
     def json(self):
         return {
@@ -86,5 +89,6 @@ class Teacher(db.Model):
             'rank': self.rank,
             'previous_attestation_date': self.previous_attestation_date,
             'next_attestation_date': self.next_attestation_date,
-            'degree': self.degree
+            'degree': self.degree,
+            'avatar_url': self.avatar_url
         }

@@ -30,7 +30,8 @@ class TeacherUtils:
                     rank=data.get('rank'),
                     previous_attestation_date=data.get('previous_attestation_date'),
                     next_attestation_date=data.get('next_attestation_date'),
-                    degree=data.get('degree')
+                    degree=data.get('degree'),
+                    avatar_url=data.get('avatar_url')
                 )
 
                 # insert the user
@@ -83,7 +84,7 @@ class TeacherUtils:
         SET personnel_number=%s, employment_history=%s, surname=%s, name=%s, middle_name=%s, birth_date=%s,
                  educational_institution=%s, specialty=%s, accreditation_level=%s, graduation_year=%s, position=%s, 
                  experience=%s, qualification_category=%s, rank=%s, previous_attestation_date=%s, 
-                 next_attestation_date=%s, degree=%s
+                 next_attestation_date=%s, degree=%s, avatar_url=%s
         WHERE personnel_number=%s;
         """
         qualification_category = update.get('qualification_category')
@@ -97,7 +98,7 @@ class TeacherUtils:
                        CATEGORY[qualification_category].value,
                        RANK[rank].value if rank else None,
                        update.get('previous_attestation_date'), update.get('next_attestation_date'),
-                       update.get('degree', None),
+                       update.get('degree', None), update.get('avatar_url', None),
                        personnel_number)
         db.engine.execute(sql, update_with)
         return {"message": "successfully updated"}

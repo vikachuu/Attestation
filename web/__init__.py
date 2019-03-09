@@ -5,7 +5,6 @@ from flask_bcrypt import Bcrypt
 from flask_heroku import Heroku
 from flask_cors import CORS
 
-
 app = Flask(__name__)
 app.config.from_object('config')
 
@@ -21,8 +20,9 @@ app.json_encoder = CustomJSONEncoder
 from web.controller.login_controller import UserLogin, UserRegister
 from web.controller.user_controller import UserController
 from web.controller.teacher_controller import AddTeacher, TeacherById, GetAllTeachers, GetFilteredTeachers
+from web.controller.attestation_controller import CreateAttestation
 
-api.add_resource(UserController, '/api/user', endpoint='user')
+api.add_resource(UserController, '/api/user', endpoint='user')  # TODO: delete endpoint
 api.add_resource(UserLogin, '/api/login', endpoint='login')
 api.add_resource(UserRegister, '/api/register', endpoint='register')
 
@@ -31,6 +31,8 @@ api.add_resource(TeacherById, '/api/teacher/<teacher_id>', endpoint='teacher/<te
 
 api.add_resource(GetAllTeachers, '/api/teachers', endpoint='teachers')
 api.add_resource(GetFilteredTeachers, '/api/teachers/filtered', endpoint='teachers/filtered')
+
+api.add_resource(CreateAttestation, '/api/attestation', endpoint='attestation')
 
 
 @app.route("/")

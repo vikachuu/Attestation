@@ -38,7 +38,7 @@ class Register:
     @staticmethod
     def register_user(data):
         # check if user already exists
-        user = User.query.filter_by(login=data.get('login')).first()
+        user = User.query.filter_by(login=data.get('login')).first()  # TODO: rewrite to sql query
         if not user:
             try:
                 user = User(
