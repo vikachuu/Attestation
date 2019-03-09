@@ -36,3 +36,9 @@ class GetAllTeachers(Resource):
 
     def get(self):
         return TeacherUtils.get_all_teachers()
+
+
+class GetFilteredTeachers(Resource):
+
+    def get(self):
+        return TeacherUtils.get_filtered_teachers(request.args)

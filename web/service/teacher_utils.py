@@ -1,5 +1,10 @@
+import json
 from functools import wraps
 
+from flask import jsonify
+from flask.json import JSONEncoder
+from sqlalchemy import text
+from datetime import date
 from web import db
 from web.model.teacher_model import Teacher
 from web.model.user_model import User
@@ -30,6 +35,20 @@ def requires_access_level(access_level):
     return decorator
 
 
+class CustomJSONEncoder(JSONEncoder):
+
+    def default(self, obj):
+        try:
+            if isinstance(obj, date):
+                return obj.isoformat()
+            iterable = iter(obj)
+        except TypeError:
+            pass
+        else:
+            return list(iterable)
+        return JSONEncoder.default(self, obj)
+
+
 class TeacherUtils:
 
     @staticmethod
@@ -37,7 +56,6 @@ class TeacherUtils:
     def create_teacher(data, token):
         teacher = Teacher.query.filter_by(personnel_number=data.get('personnel_number')).first()
         if not teacher:
-            # try:
                 teacher = Teacher(
                     personnel_number=data.get('personnel_number'),
                     employment_history=data.get('employment_history'),
@@ -69,12 +87,6 @@ class TeacherUtils:
                     'message': 'Successfully created teacher {}.'.format(teacher.surname)
                 }
                 return response_object, 200
-            # except Exception as e:
-            #     response_object = {
-            #         'status': 'fail',
-            #         'message': 'Error occurred creating teacher. Please try again. {}'.format(e)
-            #     }
-            #     return response_object, 401
         else:
             response_object = {
                 'status': 'fail',
@@ -85,7 +97,6 @@ class TeacherUtils:
     @staticmethod
     def get_teacher_by_id(personnel_number):
         teacher = Teacher.query.filter_by(personnel_number=personnel_number).first()  # TODO: query
-        print(type(teacher))
         if teacher:
             return teacher.json(), 200
         else:
@@ -102,3 +113,38 @@ class TeacherUtils:
             return [teacher.json() for teacher in teachers], 200
         else:
             return [], 200
+
+    @staticmethod
+    def get_filtered_teachers(filters):
+        qualification_category = filters.get("qualification_category")
+        rank = filters.get("rank")
+
+        if qualification_category and rank:
+            sql = """
+            SELECT *
+            FROM teacher
+            WHERE qualification_category=%s AND rank=%s;
+            """
+            result = db.engine.execute(sql, (qualification_category, rank))
+        elif qualification_category:
+            sql = """
+            SELECT *
+            FROM teacher
+            WHERE qualification_category=%s;
+            """
+            result = db.engine.execute(sql, (qualification_category,))
+        elif rank:
+            sql = """
+            SELECT *
+            FROM teacher
+            WHERE rank=%s;
+            """
+            result = db.engine.execute(sql, (rank,))
+        else:
+            sql = """
+            SELECT *
+            FROM teacher;
+            """
+            result = db.engine.execute(sql)
+
+        return jsonify([dict(row) for row in result])
