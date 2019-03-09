@@ -11,8 +11,9 @@ class User(db.Model):
     password = db.Column(db.String(100), nullable=False)
     access_level = db.Column(db.Integer, nullable=False)
 
-    personnel_number = db.Column(db.Integer, db.ForeignKey('teacher.personnel_number'), nullable=True)
-    teacher = db.relationship("Teacher", cascade="all, delete", back_populates="user")
+    personnel_number = db.Column(db.Integer, db.ForeignKey('teacher.personnel_number', onupdate="CASCADE",
+                                                           ondelete="CASCADE"), nullable=True)
+    teacher = db.relationship("Teacher", back_populates="user")
 
     def __init__(self, login, password, access_level=0, personnel_number=None):
         self.login = login
