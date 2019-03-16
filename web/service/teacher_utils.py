@@ -135,35 +135,27 @@ class TeacherUtils:
     def get_filtered_teachers(filters):
         qualification_category = filters.get("qualification_category")
         rank = filters.get("rank")
+        subject_name = filters.get("subject_name")
 
-        if qualification_category and rank:
-            sql = """
-            SELECT personnel_number, surname, name, qualification_category, rank
-            FROM teacher
-            WHERE qualification_category=%s AND rank=%s;
-            """
-            result = db.engine.execute(sql, (qualification_category, rank))
-        elif qualification_category:
-            sql = """
-            SELECT *
-            FROM teacher
-            WHERE qualification_category=%s;
-            """
-            result = db.engine.execute(sql, (qualification_category,))
-        elif rank:
-            sql = """
-            SELECT *
-            FROM teacher
-            WHERE rank=%s;
-            """
-            result = db.engine.execute(sql, (rank,))
-        else:
-            sql = """
-            SELECT *
-            FROM teacher;
-            """
-            result = db.engine.execute(sql)
-
+        sql = """        
+        SELECT teacher.personnel_number, teacher.surname, teacher.name, teacher.qualification_category, teacher.rank,
+        CASE WHEN COUNT(subject.subject_id) = 0 THEN ARRAY[]::json[] ELSE
+        array_agg(json_build_object('subject_id', subject.subject_id, 
+                'department', subject.department, 'subject_name', subject.subject_name)) END AS subjects
+        FROM teacher 
+        LEFT OUTER JOIN teacher_subject ON teacher.personnel_number = teacher_subject.personnel_number
+        LEFT OUTER JOIN subject ON subject.subject_id = teacher_subject.subject_id
+        
+        WHERE (%s IS NULL OR teacher.qualification_category=%s)
+        AND (%s IS NULL OR teacher.rank=%s)
+        AND EXISTS (SELECT *
+                    FROM teacher AS T2
+                    LEFT OUTER JOIN teacher_subject AS TS2 ON T2.personnel_number = TS2.personnel_number
+                    LEFT OUTER JOIN subject AS S2 ON S2.subject_id = TS2.subject_id
+                    WHERE TS2.personnel_number=teacher.personnel_number AND (%s IS NULL OR S2.subject_name=%s))
+        GROUP BY teacher.personnel_number, teacher.surname, teacher.name, teacher.qualification_category, teacher.rank;
+        """
+        result = db.engine.execute(sql, (qualification_category, qualification_category,  rank, rank, subject_name, subject_name))
         return jsonify([dict(row) for row in result])
 
     @staticmethod
