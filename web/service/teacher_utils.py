@@ -106,8 +106,14 @@ class TeacherUtils:
     @staticmethod
     def get_all_teachers():
         sql = """
-        SELECT personnel_number, surname, name, qualification_category, rank
-        FROM teacher;
+        SELECT teacher.personnel_number, teacher.surname, teacher.name, teacher.qualification_category, teacher.rank,
+        CASE WHEN COUNT(subject.subject_id) = 0 THEN ARRAY[]::json[] ELSE
+        array_agg(json_build_object('subject_id', subject.subject_id, 
+                'department', subject.department, 'subject_name', subject.subject_name)) END AS subjects
+        FROM teacher 
+        LEFT OUTER JOIN teacher_subject ON teacher.personnel_number = teacher_subject.personnel_number
+        LEFT OUTER JOIN subject ON subject.subject_id = teacher_subject.subject_id
+        GROUP BY teacher.personnel_number, teacher.surname, teacher.name, teacher.qualification_category, teacher.rank;
         """
         result = db.engine.execute(sql)
         return jsonify([dict(row) for row in result])
