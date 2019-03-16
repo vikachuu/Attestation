@@ -18,7 +18,7 @@ class Subject(db.Model):
 class TeacherSubject(db.Model):
     __tablename__ = "teacher_subject"
 
-    subject_id = db.Column(db.Integer, db.ForeignKey('subject.subject_id ', onupdate="CASCADE",
+    subject_id = db.Column(db.Integer, db.ForeignKey('subject.subject_id', onupdate="CASCADE",
                                                      ondelete="NO ACTION"), primary_key=True)
     personnel_number = db.Column(db.Integer, db.ForeignKey('teacher.personnel_number', onupdate="CASCADE",
                                                            ondelete="CASCADE"), primary_key=True)
