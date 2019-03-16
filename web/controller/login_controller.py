@@ -16,5 +16,4 @@ class UserLogin(Resource):
 class UserRegister(Resource):
     def post(self):
         post_data = request.get_json()
-        print(post_data)
         return Register.register_user(data=post_data)

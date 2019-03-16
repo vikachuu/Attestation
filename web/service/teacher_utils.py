@@ -157,3 +157,28 @@ class TeacherUtils:
         result = db.engine.execute(sql, (personnel_number,))
         teacher = [dict(row) for row in result]
         return True if teacher else False
+
+    @staticmethod
+    def get_category_by_personnel_number(personnel_number):
+        sql = """
+        SELECT category
+        FROM teacher
+        WHERE personnel_number=%s;
+        """
+        result = db.engine.execute(sql, (personnel_number,))
+        category = [dict(row) for row in result]
+        # return jsonify(category[0])
+        return category[0]["category"]
+
+    @staticmethod
+    def get_rank_by_personnel_number(personnel_number):
+        sql = """
+        SELECT rank
+        FROM teacher
+        WHERE personnel_number=%s;
+        """
+        result = db.engine.execute(sql, (personnel_number,))
+        category = [dict(row) for row in result]
+        # return jsonify(category[0])
+        return category[0]["category"]
+
