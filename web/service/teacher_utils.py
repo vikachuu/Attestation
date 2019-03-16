@@ -53,10 +53,30 @@ class TeacherUtils:
     @staticmethod
     def get_teacher_by_id(personnel_number):
         sql = """
-        SELECT *
-        FROM teacher
-        WHERE personnel_number=%s;
+        SELECT teacher.personnel_number, teacher.employment_history, teacher.surname, teacher.name, teacher.middle_name,
+        teacher.birth_date, teacher.educational_institution, teacher.specialty, teacher.accreditation_level, 
+        teacher.graduation_year, teacher.position, teacher.experience, teacher.qualification_category, teacher.rank,
+        teacher.previous_attestation_date, teacher.next_attestation_date, teacher.degree, teacher.avatar_url,
+        
+        CASE WHEN COUNT(subject.subject_id) = 0 THEN ARRAY[]::json[] ELSE
+        array_agg(json_build_object('subject_id', subject.subject_id, 
+                'department', subject.department, 'subject_name', subject.subject_name)) END AS subjects
+        FROM teacher 
+        LEFT OUTER JOIN teacher_subject ON teacher.personnel_number = teacher_subject.personnel_number
+        LEFT OUTER JOIN subject ON subject.subject_id = teacher_subject.subject_id
+        WHERE teacher.personnel_number=%s
+        GROUP BY teacher.personnel_number, teacher.employment_history, teacher.surname, teacher.name, teacher.middle_name,
+        teacher.birth_date, teacher.educational_institution, teacher.specialty, teacher.accreditation_level, 
+        teacher.graduation_year, teacher.position, teacher.experience, teacher.qualification_category, teacher.rank,
+        teacher.previous_attestation_date, teacher.next_attestation_date, teacher.degree, teacher.avatar_url;
         """
+
+
+        # sql = """
+        # SELECT *
+        # FROM teacher
+        # WHERE personnel_number=%s;
+        # """
         result = db.engine.execute(sql, (personnel_number,))
         teacher = [dict(row) for row in result]
         if teacher:
