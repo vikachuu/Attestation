@@ -148,11 +148,11 @@ class TeacherUtils:
         
         WHERE (%s IS NULL OR teacher.qualification_category=%s)
         AND (%s IS NULL OR teacher.rank=%s)
-        AND EXISTS (SELECT *
-                    FROM teacher AS T2
-                    LEFT OUTER JOIN teacher_subject AS TS2 ON T2.personnel_number = TS2.personnel_number
-                    LEFT OUTER JOIN subject AS S2 ON S2.subject_id = TS2.subject_id
-                    WHERE TS2.personnel_number=teacher.personnel_number AND (%s IS NULL OR S2.subject_name=%s))
+        AND (%s IS NULL OR  EXISTS (SELECT *
+                                    FROM teacher AS T2
+                                    LEFT OUTER JOIN teacher_subject AS TS2 ON T2.personnel_number = TS2.personnel_number
+                                    LEFT OUTER JOIN subject AS S2 ON S2.subject_id = TS2.subject_id
+                                    WHERE TS2.personnel_number=teacher.personnel_number AND S2.subject_name=%s))
         GROUP BY teacher.personnel_number, teacher.surname, teacher.name, teacher.qualification_category, teacher.rank;
         """
         result = db.engine.execute(sql, (qualification_category, qualification_category,  rank, rank, subject_name, subject_name))
