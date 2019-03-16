@@ -14,7 +14,6 @@ class AttestationUtils:
             personnel_number = data.get('personnel_number')
             if personnel_number and TeacherUtils.if_teacher_exists(personnel_number):
                 attestation = Attestation(
-                    attestation_number=data.get('attestation_number'),
                     attestation_date=data.get('attestation_date'),
                     attestation_letter=data.get('attestation_letter'),
                     characteristic=data.get('characteristic'),
