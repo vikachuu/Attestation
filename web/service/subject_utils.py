@@ -1,3 +1,5 @@
+from flask import jsonify
+
 from web import db
 from web.model.subject_model import Subject
 
@@ -26,3 +28,12 @@ class SubjectUtils:
                 'message': 'Subject already exists.',
             }
             return response_object, 500
+
+    @staticmethod
+    def get_all_subjects():
+        sql = """
+        SELECT *
+        FROM subject;
+        """
+        result = db.engine.execute(sql)
+        return jsonify([dict(row) for row in result])

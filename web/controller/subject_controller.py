@@ -8,3 +8,6 @@ class CreateSubject(Resource):
     def post(self):
         data = request.get_json()
         return SubjectUtils.create_subject(data)
+
+    def get(self):
+        return SubjectUtils.get_all_subjects()
