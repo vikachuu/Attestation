@@ -13,7 +13,8 @@ class AddTeacher(Resource):
 
         create_teacher_response = TeacherUtils.create_teacher(post_data, token)
         if create_teacher_response[1] == 200:
-            password = "".join(post_data['birth_date'].split('/'))
+            password = "".join(post_data['birth_date'].split('-'))
+            print(password)
             data = {
                 'login': str(post_data['personnel_number']),
                 'password': password,
