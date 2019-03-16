@@ -9,9 +9,9 @@ from web.service.teacher_utils import TeacherUtils
 class CreateTeacher(Resource):
     def create_teacher_subjects(self, post_data):
         personnel_number = post_data['personnel_number']
-        for subject_id in post_data.get('subjects', []):
+        for subject in post_data.get('subjects', []):
             data = {
-                "subject_id": subject_id,
+                "subject_id": subject['subject_id'],
                 "personnel_number": personnel_number
             }
             TeacherSubjectUtils.create_teacher_subject(data)
