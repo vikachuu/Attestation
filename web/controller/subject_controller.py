@@ -17,3 +17,8 @@ class CreateTeacherSubject(Resource):
     def post(self):
         data = request.get_json()
         return TeacherSubjectUtils.create_teacher_subject(data)
+
+
+class TeacherSubjectByTeacherId(Resource):
+    def delete(self, teacher_id):
+        return TeacherSubjectUtils.delete_teacher_subject_by_teacher_id(teacher_id)

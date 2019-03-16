@@ -64,3 +64,12 @@ class TeacherSubjectUtils:
                 'message': 'Teacher_subject already exists.',
             }
             return response_object, 500
+
+    @staticmethod
+    def delete_teacher_subject_by_teacher_id(personnel_number):
+        sql = """
+        DELETE FROM teacher_subject
+        WHERE personnel_number=%s;
+        """
+        db.engine.execute(sql, (personnel_number,))
+        return {"message": "successfully deleted"}

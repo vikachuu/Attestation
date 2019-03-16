@@ -21,7 +21,7 @@ from web.controller.login_controller import UserLogin, UserRegister
 from web.controller.user_controller import UserController, TeacherUserProfile
 from web.controller.teacher_controller import CreateTeacher, TeacherById, GetAllTeachers, GetFilteredTeachers
 from web.controller.attestation_controller import CreateAttestation
-from web.controller.subject_controller import CreateSubject, CreateTeacherSubject
+from web.controller.subject_controller import CreateSubject, CreateTeacherSubject, TeacherSubjectByTeacherId
 
 api.add_resource(UserController, '/api/user', endpoint='user')  # TODO: delete endpoint
 api.add_resource(UserLogin, '/api/login', endpoint='login')
@@ -39,6 +39,8 @@ api.add_resource(TeacherUserProfile, '/api/profile', endpoint='profile')
 
 api.add_resource(CreateSubject, '/api/subject', endpoint='subject')
 api.add_resource(CreateTeacherSubject, '/api/teachersubject', endpoint='teachersubject')
+
+api.add_resource(TeacherSubjectByTeacherId, '/api/teachersubject/<teacher_id>', endpoint='teachersubject/<teacher_id>')
 
 
 @app.route("/")

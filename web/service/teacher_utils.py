@@ -70,13 +70,6 @@ class TeacherUtils:
         teacher.graduation_year, teacher.position, teacher.experience, teacher.qualification_category, teacher.rank,
         teacher.previous_attestation_date, teacher.next_attestation_date, teacher.degree, teacher.avatar_url;
         """
-
-
-        # sql = """
-        # SELECT *
-        # FROM teacher
-        # WHERE personnel_number=%s;
-        # """
         result = db.engine.execute(sql, (personnel_number,))
         teacher = [dict(row) for row in result]
         if teacher:

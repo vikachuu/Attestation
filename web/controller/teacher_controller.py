@@ -7,7 +7,8 @@ from web.service.teacher_utils import TeacherUtils
 
 
 class CreateTeacher(Resource):
-    def create_teacher_subjects(self, post_data):
+    @staticmethod
+    def create_teacher_subjects(post_data):
         personnel_number = post_data['personnel_number']
         for subject in post_data.get('subjects', []):
             data = {
@@ -51,6 +52,9 @@ class TeacherById(Resource):
 
     def put(self, teacher_id):
         put_data = request.get_json()
+        personnel_number = put_data.get("personnel_number")
+        TeacherSubjectUtils.delete_teacher_subject_by_teacher_id(personnel_number)
+        CreateTeacher.create_teacher_subjects(put_data)
         return TeacherUtils.update_teacher_by_id(teacher_id, put_data)
 
 
