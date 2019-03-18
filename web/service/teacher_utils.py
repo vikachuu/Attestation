@@ -172,7 +172,7 @@ class TeacherUtils:
     @staticmethod
     def get_category_by_personnel_number(personnel_number):
         sql = """
-        SELECT category
+        SELECT qualification_category
         FROM teacher
         WHERE personnel_number=%s;
         """
