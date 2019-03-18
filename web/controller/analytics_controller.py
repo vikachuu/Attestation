@@ -12,3 +12,8 @@ class CountSubjectTeachers(Resource):
 class GetTeachersAllSubjectsOfDepartment(Resource):
     def get(self):
         return TeacherAnalyticsUtils.get_teachers_all_subjects_of_department(request.args)
+
+
+class CreateFiveYearsPlan(Resource):
+    def get(self):
+        return TeacherAnalyticsUtils.get_five_years_plan()
