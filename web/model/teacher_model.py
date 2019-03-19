@@ -46,6 +46,9 @@ class Teacher(db.Model):
     attestation = db.relationship("Attestation", back_populates="teacher")
     teacher_subject = db.relationship("TeacherSubject", back_populates="teacher")
 
+    extra_application = db.relationship("ExtraApplication", back_populates="teacher")
+    deferment_application = db.relationship("DefermentApplication", back_populates="teacher")
+
     def __init__(self, personnel_number, employment_history, surname, name, middle_name, birth_date,
                  educational_institution, specialty, accreditation_level, graduation_year, position, experience,
                  qualification_category, rank, previous_attestation_date, next_attestation_date, degree, avatar_url):
@@ -69,27 +72,3 @@ class Teacher(db.Model):
         self.next_attestation_date = next_attestation_date
         self.degree = degree
         self.avatar_url = avatar_url
-
-    def json(self):
-        return {
-            'personnel_number': self.personnel_number,
-            'employment_history': self.employment_history,
-            'surname': self.surname,
-            'name': self.name,
-            'middle_name': self.middle_name,
-            'birth_date': self.birth_date.strftime('%d/%m/%Y'),
-
-            'educational_institution': self.educational_institution,
-            'specialty': self.specialty,
-            'accreditation_level': self.accreditation_level,
-            'graduation_year': self.graduation_year,
-            'position': self.position,
-            'experience': self.experience,
-
-            'qualification_category': self.qualification_category,
-            'rank': self.rank,
-            'previous_attestation_date': self.previous_attestation_date,
-            'next_attestation_date': self.next_attestation_date,
-            'degree': self.degree,
-            'avatar_url': self.avatar_url
-        }
