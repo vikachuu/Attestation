@@ -91,9 +91,9 @@ class DefermentApplicationUtils:
             personnel_number = data.get('personnel_number')
             if personnel_number and TeacherUtils.if_teacher_exists(personnel_number):
                 deferment_application = DefermentApplication(
-                    deferment_application_date=data.get('extra_application_date'),
-                    deferment_application_reason=data.get('extra_application_reason'),
-                    deferment_application_status=data.get('extra_application_status'),
+                    deferment_application_date=data.get('deferment_application_date'),
+                    deferment_application_reason=data.get('deferment_application_reason'),
+                    deferment_application_status=data.get('deferment_application_status'),
                     deferment_application_years=data.get('deferment_application_years'),
                     personnel_number=personnel_number
                 )
