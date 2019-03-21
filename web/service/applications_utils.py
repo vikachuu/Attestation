@@ -1,7 +1,7 @@
 from flask import jsonify
 
 from web import db
-from web.model.extra_app_model import ExtraApplication, STATUS
+from web.model.application_models import ExtraApplication, STATUS, DefermentApplication
 from web.service.teacher_utils import TeacherUtils
 
 
@@ -79,3 +79,42 @@ class ExtraApplicationUtils:
         result = db.engine.execute(sql, (status, status))
         # return jsonify([dict(row) for row in result])
         return result.scalar()
+
+
+class DefermentApplicationUtils:
+    @staticmethod
+    def create_deferment_application(data):
+        deferment_application = DefermentApplication.query. \
+            filter_by(personnel_number=data.get('personnel_number'),
+                      extra_application_status=STATUS['IN_PROGRESS'].value).first()
+        if not deferment_application:
+            personnel_number = data.get('personnel_number')
+            if personnel_number and TeacherUtils.if_teacher_exists(personnel_number):
+                deferment_application = DefermentApplication(
+                    deferment_application_date=data.get('extra_application_date'),
+                    deferment_application_reason=data.get('extra_application_reason'),
+                    deferment_application_status=data.get('extra_application_status'),
+                    deferment_application_years=data.get('deferment_application_years'),
+                    personnel_number=personnel_number
+                )
+
+                db.session.add(deferment_application)
+                db.session.commit()
+
+                response_object = {
+                    'status': 'success',
+                    'message': 'Successfully created deferment application'
+                }
+                return response_object, 200
+            else:
+                response_object = {
+                    'status': 'fail',
+                    'message': 'No such teacher for application exists',
+                }
+                return response_object, 400
+        else:
+            response_object = {
+                'status': 'fail',
+                'message': 'You can''t create application while there is one in progress.',
+            }
+            return response_object, 400

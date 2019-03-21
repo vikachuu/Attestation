@@ -1,7 +1,7 @@
 from flask import request
 from flask_restful import Resource
 
-from web.service.extra_app_utils import ExtraApplicationUtils
+from web.service.applications_utils import ExtraApplicationUtils, DefermentApplicationUtils
 
 
 class ExtraApplication(Resource):
@@ -24,3 +24,9 @@ class CountExtraApplications(Resource):
     def get(self):
         filters = request.args
         return ExtraApplicationUtils.count_filtered_extra_applications(filters)
+
+
+class DefermentApplication(Resource):
+    def post(self):
+        data = request.get_json()
+        return DefermentApplicationUtils.create_deferment_application(data)
