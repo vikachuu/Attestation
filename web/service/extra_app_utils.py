@@ -1,3 +1,5 @@
+from flask import jsonify
+
 from web import db
 from web.model.extra_app_model import ExtraApplication, STATUS
 from web.service.teacher_utils import TeacherUtils
@@ -50,7 +52,18 @@ class ExtraApplicationUtils:
         WHERE extra_application_number=%s;
         """
         update_with = (data.get('extra_application_number'), data.get('extra_application_date'),
-                       data.get('extra_application_reason'), data.get('extra_application_status'),
+                       data.get('extra_application_reason'), STATUS[data.get('extra_application_status')].value,
                        data.get('personnel_number'), application_id)
         db.engine.execute(sql, update_with)
         return {"message": "successfully updated extra application"}
+
+    @staticmethod
+    def get_filtered_extra_applications(filters):
+        status = filters.get("status")
+        sql = """        
+        SELECT *
+        FROM extra_application 
+        WHERE (%s IS NULL OR extra_application.extra_application_status=%s)
+        """
+        result = db.engine.execute(sql, (status, status))
+        return jsonify([dict(row) for row in result])
