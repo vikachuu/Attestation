@@ -67,3 +67,15 @@ class ExtraApplicationUtils:
         """
         result = db.engine.execute(sql, (status, status))
         return jsonify([dict(row) for row in result])
+
+    @staticmethod
+    def count_filtered_extra_applications(filters):
+        status = filters.get("status")
+        sql = """        
+        SELECT COUNT(*)
+        FROM extra_application 
+        WHERE (%s IS NULL OR extra_application.extra_application_status=%s)
+                """
+        result = db.engine.execute(sql, (status, status))
+        # return jsonify([dict(row) for row in result])
+        return result.scalar()

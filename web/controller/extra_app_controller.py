@@ -18,3 +18,9 @@ class ExtraApplicationById(Resource):
     def put(self, application_id):
         data = request.get_json()
         return ExtraApplicationUtils.update_extra_application(application_id, data)
+
+
+class CountExtraApplications(Resource):
+    def get(self):
+        filters = request.args
+        return ExtraApplicationUtils.count_filtered_extra_applications(filters)
