@@ -1,5 +1,5 @@
 from web import db
-from web.model.application_models import ExtraApplication, STATUS
+from web.model.extra_app_model import ExtraApplication, STATUS
 from web.service.teacher_utils import TeacherUtils
 
 

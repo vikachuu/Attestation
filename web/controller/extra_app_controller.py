@@ -1,7 +1,7 @@
 from flask import request
 from flask_restful import Resource
 
-from web.service.application_utils import ExtraApplicationUtils
+from web.service.extra_app_utils import ExtraApplicationUtils
 
 
 class CreateExtraApplication(Resource):
