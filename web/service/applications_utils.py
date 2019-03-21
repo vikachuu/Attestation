@@ -86,7 +86,7 @@ class DefermentApplicationUtils:
     def create_deferment_application(data):
         deferment_application = DefermentApplication.query. \
             filter_by(personnel_number=data.get('personnel_number'),
-                      extra_application_status=STATUS['IN_PROGRESS'].value).first()
+                      deferment_application_status=STATUS['IN_PROGRESS'].value).first()
         if not deferment_application:
             personnel_number = data.get('personnel_number')
             if personnel_number and TeacherUtils.if_teacher_exists(personnel_number):
@@ -118,3 +118,41 @@ class DefermentApplicationUtils:
                 'message': 'You can''t create application while there is one in progress.',
             }
             return response_object, 400
+
+    @staticmethod
+    def update_deferment_application(application_id, data):
+        sql = """
+        UPDATE deferment_application
+        SET deferment_application_number=%s, deferment_application_date=%s, deferment_application_reason=%s, 
+        deferment_application_status=%s, deferment_application_years=%s, personnel_number=%s
+        WHERE deferment_application_number=%s;
+        """
+        update_with = (data.get('deferment_application_number'), data.get('deferment_application_date'),
+                       data.get('deferment_application_reason'), STATUS[data.get('deferment_application_status')].value,
+                       data.get('deferment_application_years'),
+                       data.get('personnel_number'), application_id)
+        db.engine.execute(sql, update_with)
+        return {"message": "successfully updated deferment application"}
+
+    @staticmethod
+    def get_filtered_deferment_applications(filters):
+        status = filters.get("status")
+        sql = """        
+        SELECT *
+        FROM deferment_application 
+        WHERE (%s IS NULL OR deferment_application.deferment_application_status=%s)
+        """
+        result = db.engine.execute(sql, (status, status))
+        return jsonify([dict(row) for row in result])
+
+    @staticmethod
+    def count_filtered_deferment_applications(filters):
+        status = filters.get("status")
+        sql = """        
+        SELECT COUNT(*)
+        FROM deferment_application 
+        WHERE (%s IS NULL OR deferment_application.deferment_application_status=%s)
+                """
+        result = db.engine.execute(sql, (status, status))
+        # return jsonify([dict(row) for row in result])
+        return result.scalar()
