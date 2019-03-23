@@ -37,8 +37,8 @@ class Teacher(db.Model):
 
     qualification_category = db.Column(db.String(50), nullable=False)
     rank = db.Column(db.String(50), nullable=True)
-    previous_attestation_date = db.Column(db.Integer, nullable=False)  # TODO: change Date
-    next_attestation_date = db.Column(db.Integer, nullable=False)  # TODO: change Date
+    previous_attestation_date = db.Column(db.Integer, nullable=False)
+    next_attestation_date = db.Column(db.Integer, nullable=False)
     degree = db.Column(db.String(100), nullable=True)
     avatar_url = db.Column(db.String(1000), nullable=True)
 
@@ -48,6 +48,8 @@ class Teacher(db.Model):
 
     extra_application = db.relationship("ExtraApplication", back_populates="teacher")
     deferment_application = db.relationship("DefermentApplication", back_populates="teacher")
+
+    referral_to_courses = db.relationship("ReferralToCourses", back_populates="teacher")
 
     def __init__(self, personnel_number, employment_history, surname, name, middle_name, birth_date,
                  educational_institution, specialty, accreditation_level, graduation_year, position, experience,
@@ -68,7 +70,7 @@ class Teacher(db.Model):
 
         self.qualification_category = CATEGORY[qualification_category].value if qualification_category else None
         self.rank = RANK[rank].value if rank else None
-        self.previous_attestation_date = previous_attestation_date
-        self.next_attestation_date = next_attestation_date
+        self.previous_attestation_date = datetime.strptime(previous_attestation_date, '%Y').year
+        self.next_attestation_date = datetime.strptime(next_attestation_date, '%Y').year
         self.degree = degree
         self.avatar_url = avatar_url

@@ -17,3 +17,8 @@ class GetTeachersAllSubjectsOfDepartment(Resource):
 class CreateFiveYearsPlan(Resource):
     def get(self):
         return TeacherAnalyticsUtils.get_five_years_plan()
+
+
+class GetTeachersCurrentYearAttestation(Resource):
+    def get(self):
+        return TeacherAnalyticsUtils.get_teachers_current_year_attestation()

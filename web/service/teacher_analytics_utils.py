@@ -1,5 +1,5 @@
 from flask import jsonify
-
+from datetime import datetime
 from web import db
 
 
@@ -40,4 +40,15 @@ class TeacherAnalyticsUtils:
                                             AND teacher_subject.personnel_number=teacher.personnel_number));
         """
         result = db.engine.execute(sql, (department,))
+        return jsonify([dict(row) for row in result])
+
+    @staticmethod
+    def get_teachers_current_year_attestation():
+        current_year = datetime.now().year
+        sql = """
+        SELECT *
+        FROM teacher
+        WHERE next_attestation_date=%s;
+        """
+        result = db.engine.execute(sql, (current_year,))
         return jsonify([dict(row) for row in result])
