@@ -60,12 +60,14 @@ class ExtraApplicationUtils:
     @staticmethod
     def get_filtered_extra_applications(filters):
         status = filters.get("status")
+        personnel_number = filters.get("personnel_number")
         sql = """        
         SELECT *
         FROM extra_application 
-        WHERE (%s IS NULL OR extra_application.extra_application_status=%s)
+        WHERE ((%s IS NULL OR extra_application_status=%s)
+        AND (%s IS NULL OR personnel_number=%s))
         """
-        result = db.engine.execute(sql, (status, status))
+        result = db.engine.execute(sql, (status, status, personnel_number, personnel_number))
         return jsonify([dict(row) for row in result])
 
     @staticmethod
@@ -137,12 +139,14 @@ class DefermentApplicationUtils:
     @staticmethod
     def get_filtered_deferment_applications(filters):
         status = filters.get("status")
+        personnel_number = filters.get("personnel_number")
         sql = """        
         SELECT *
         FROM deferment_application 
-        WHERE (%s IS NULL OR deferment_application.deferment_application_status=%s)
+        WHERE ((%s IS NULL OR deferment_application_status=%s)
+        AND (%s IS NULL OR personnel_number=%s))
         """
-        result = db.engine.execute(sql, (status, status))
+        result = db.engine.execute(sql, (status, status, personnel_number, personnel_number))
         return jsonify([dict(row) for row in result])
 
     @staticmethod
