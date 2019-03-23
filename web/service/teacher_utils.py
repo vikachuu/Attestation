@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import jsonify
 from web import db
 from web.model.teacher_model import Teacher, CATEGORY, RANK
@@ -102,9 +104,10 @@ class TeacherUtils:
         """
         qualification_category = update.get('qualification_category')
         rank = update.get('rank')
+        birth_date = datetime.strptime(update.get('birth_date'), '%Y-%m-%d').date()
 
         update_with = (update.get('personnel_number'), update.get('employment_history'), update.get('surname'),
-                       update.get('name'), update.get('middle_name'), update.get('birth_date'),
+                       update.get('name'), update.get('middle_name'), birth_date,
                        update.get('educational_institution'), update.get('specialty'),
                        update.get('accreditation_level'), update.get('graduation_year', None), update.get('position'),
                        update.get('experience'),
