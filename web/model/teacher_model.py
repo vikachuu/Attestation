@@ -70,7 +70,7 @@ class Teacher(db.Model):
 
         self.qualification_category = CATEGORY[qualification_category].value if qualification_category else None
         self.rank = RANK[rank].value if rank else None
-        self.previous_attestation_date = datetime.strptime(previous_attestation_date, '%Y').year
-        self.next_attestation_date = datetime.strptime(next_attestation_date, '%Y').year
+        self.previous_attestation_date = datetime.strptime(str(previous_attestation_date), '%Y').year
+        self.next_attestation_date = datetime.strptime(str(next_attestation_date), '%Y').year
         self.degree = degree
         self.avatar_url = avatar_url
