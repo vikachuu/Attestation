@@ -49,7 +49,7 @@ class Teacher(db.Model):
     extra_application = db.relationship("ExtraApplication", back_populates="teacher")
     deferment_application = db.relationship("DefermentApplication", back_populates="teacher")
 
-    # referral_to_courses = db.relationship("ReferralToCourses", back_populates="teacher")
+    referral_to_courses = db.relationship("ReferralToCourses", back_populates="teacher")
 
     def __init__(self, personnel_number, employment_history, surname, name, middle_name, birth_date,
                  educational_institution, specialty, accreditation_level, graduation_year, position, experience,
