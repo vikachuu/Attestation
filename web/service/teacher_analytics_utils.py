@@ -17,8 +17,9 @@ class TeacherAnalyticsUtils:
     @staticmethod
     def get_five_years_plan_document():
         sql = """
-        SELECT personnel_number, surname, name, middle_name, qualification_category, rank, previous_attestation_date, 
-        next_attestation_date
+        SELECT surname AS "прізвище", name AS "ім'я", middle_name AS "по-батькові", qualification_category AS "категорія", 
+        rank AS "звання", previous_attestation_date AS "дата попередньої атсетації", 
+        next_attestation_date AS "дата настпуної атестації"
         FROM teacher;
         """
         result = db.engine.execute(sql)

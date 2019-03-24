@@ -23,8 +23,8 @@ class CreateFiveYearsPlan(Resource):
 class CreateFiveYearsPlanDocument(Resource):
     def get(self):
         query_set = TeacherAnalyticsUtils.get_five_years_plan_document()
-        column_names = ['surname', 'name', 'middle_name',
-                        'qualification_category', 'rank', 'previous_attestation_date', 'next_attestation_date']
+        column_names = ['прізвище', 'ім\'я', 'по-батькові',
+                        'категорія', 'звання', 'дата попередньої атсетації', 'дата настпуної атестації']
         return excel.make_response_from_query_sets(query_set, column_names, "xlsx")
 
 
