@@ -66,6 +66,7 @@ class ExtraApplicationUtils:
         FROM extra_application 
         WHERE ((%s IS NULL OR extra_application_status=%s)
         AND (%s IS NULL OR personnel_number=%s))
+        ORDER BY extra_application_number DESC;
         """
         result = db.engine.execute(sql, (status, status, personnel_number, personnel_number))
         return jsonify([dict(row) for row in result])
@@ -145,6 +146,7 @@ class DefermentApplicationUtils:
         FROM deferment_application 
         WHERE ((%s IS NULL OR deferment_application_status=%s)
         AND (%s IS NULL OR personnel_number=%s))
+        ORDER BY deferment_application_number DESC;
         """
         result = db.engine.execute(sql, (status, status, personnel_number, personnel_number))
         return jsonify([dict(row) for row in result])
