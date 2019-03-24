@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_heroku import Heroku
 from flask_cors import CORS
+import flask_excel as excel
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -13,6 +14,7 @@ db = SQLAlchemy(app)
 flask_bcrypt = Bcrypt(app)
 heroku = Heroku(app)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+excel.init_excel(app)
 
 from web.service.utils import CustomJSONEncoder  # uses User model -> local import
 app.json_encoder = CustomJSONEncoder
@@ -23,9 +25,10 @@ from web.controller.teacher_controller import CreateTeacher, TeacherById, GetAll
 from web.controller.attestation_controller import CreateAttestation
 from web.controller.subject_controller import CreateSubject, CreateTeacherSubject, TeacherSubjectByTeacherId
 from web.controller.analytics_controller import CountSubjectTeachers, GetTeachersAllSubjectsOfDepartment, \
-    CreateFiveYearsPlan, GetTeachersCurrentYearAttestation
+    CreateFiveYearsPlan, GetTeachersCurrentYearAttestation, CreateFiveYearsPlanDocument
 from web.controller.applications_controller import ExtraApplication, ExtraApplicationById, CountExtraApplications, \
     DefermentApplication, DefermentApplicationById, CountDefermentApplications
+from web.controller.courses_controller import CreateCourses, ReferralToCoursesById, CreateDateOfCourse
 
 api.add_resource(UserController, '/api/user', endpoint='user')  # TODO: delete endpoint
 api.add_resource(UserLogin, '/api/login', endpoint='login')
@@ -51,6 +54,7 @@ api.add_resource(GetTeachersCurrentYearAttestation, '/api/analytics/current_year
 api.add_resource(GetTeachersAllSubjectsOfDepartment, '/api/analytics/all_subjects_dep', endpoint='analytics/all_subjects_dep')
 
 api.add_resource(CreateFiveYearsPlan, '/api/analytics/plan', endpoint='analytics/plan')
+api.add_resource(CreateFiveYearsPlanDocument, '/api/analytics/plan/download', endpoint='analytics/plan/download')
 
 api.add_resource(ExtraApplication, '/api/application/extra', endpoint='application/extra')
 api.add_resource(CountExtraApplications, '/api/application/extra/count', endpoint='application/extra/count')
@@ -59,6 +63,10 @@ api.add_resource(ExtraApplicationById, '/api/application/extra/<application_id>'
 api.add_resource(DefermentApplication, '/api/application/deferment', endpoint='application/deferment')
 api.add_resource(CountDefermentApplications, '/api/application/deferment/count', endpoint='application/deferment/count')
 api.add_resource(DefermentApplicationById, '/api/application/deferment/<application_id>', endpoint='application/deferment/<application_id>')
+
+api.add_resource(CreateCourses, '/api/courses', endpoint='courses')
+api.add_resource(ReferralToCoursesById, '/api/courses/<referral_id>', endpoint='courses/<referral_id>')
+api.add_resource(CreateDateOfCourse, '/api/selective_course', endpoint='selective_course')
 
 
 @app.route("/")

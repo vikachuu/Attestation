@@ -15,6 +15,16 @@ class TeacherAnalyticsUtils:
         return jsonify([dict(row) for row in result])
 
     @staticmethod
+    def get_five_years_plan_document():
+        sql = """
+        SELECT personnel_number, surname, name, middle_name, qualification_category, rank, previous_attestation_date, 
+        next_attestation_date
+        FROM teacher;
+        """
+        result = db.engine.execute(sql)
+        return result.fetchall()
+
+    @staticmethod
     def count_subjects_teachers():
         sql = """
         SELECT subject.subject_name, COUNT(teacher_subject.personnel_number)
