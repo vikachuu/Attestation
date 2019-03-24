@@ -19,6 +19,8 @@ class ExtraApplicationUtils:
                     extra_application_date=data.get('extra_application_date'),
                     extra_application_reason=data.get('extra_application_reason'),
                     extra_application_status=data.get('extra_application_status'),
+                    teacher_position=data.get('teacher_position'),
+                    teacher_pib=data.get('teacher_pib'),
                     personnel_number=personnel_number
                 )
 
@@ -48,11 +50,12 @@ class ExtraApplicationUtils:
         sql = """
         UPDATE extra_application
         SET extra_application_number=%s, extra_application_date=%s, extra_application_reason=%s, 
-        extra_application_status=%s, personnel_number=%s
+        extra_application_status=%s, teacher_position=%s, teacher_pib=%s, personnel_number=%s
         WHERE extra_application_number=%s;
         """
         update_with = (data.get('extra_application_number'), data.get('extra_application_date'),
                        data.get('extra_application_reason'), STATUS[data.get('extra_application_status')].value,
+                       data.get('teacher_position'), data.get('teacher_pib'),
                        data.get('personnel_number'), application_id)
         db.engine.execute(sql, update_with)
         return {"message": "successfully updated extra application"}
@@ -63,7 +66,7 @@ class ExtraApplicationUtils:
         personnel_number = filters.get("personnel_number")
         sql = """        
         SELECT *
-        FROM extra_application 
+        FROM extra_application
         WHERE ((%s IS NULL OR extra_application_status=%s)
         AND (%s IS NULL OR personnel_number=%s))
         ORDER BY extra_application_number DESC;
@@ -98,6 +101,8 @@ class DefermentApplicationUtils:
                     deferment_application_reason=data.get('deferment_application_reason'),
                     deferment_application_status=data.get('deferment_application_status'),
                     deferment_application_years=data.get('deferment_application_years'),
+                    teacher_position=data.get('teacher_position'),
+                    teacher_pib=data.get('teacher_pib'),
                     personnel_number=personnel_number
                 )
 
@@ -127,12 +132,13 @@ class DefermentApplicationUtils:
         sql = """
         UPDATE deferment_application
         SET deferment_application_number=%s, deferment_application_date=%s, deferment_application_reason=%s, 
-        deferment_application_status=%s, deferment_application_years=%s, personnel_number=%s
+        deferment_application_status=%s, deferment_application_years=%s, teacher_position=%s, teacher_pib=%s,
+        personnel_number=%s
         WHERE deferment_application_number=%s;
         """
         update_with = (data.get('deferment_application_number'), data.get('deferment_application_date'),
                        data.get('deferment_application_reason'), STATUS[data.get('deferment_application_status')].value,
-                       data.get('deferment_application_years'),
+                       data.get('deferment_application_years'), data.get('teacher_position'), data.get('teacher_pib'),
                        data.get('personnel_number'), application_id)
         db.engine.execute(sql, update_with)
         return {"message": "successfully updated deferment application"}
