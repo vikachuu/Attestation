@@ -1,7 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from web import excel
-
+from web.service.plan_utils import FiveYearsPlanUtils
 from web.service.teacher_analytics_utils import TeacherAnalyticsUtils
 
 
@@ -22,10 +21,7 @@ class CreateFiveYearsPlan(Resource):
 
 class CreateFiveYearsPlanDocument(Resource):
     def get(self):
-        query_set = TeacherAnalyticsUtils.get_five_years_plan_document()
-        column_names = ['прізвище', 'ім\'я', 'по-батькові',
-                        'категорія', 'звання', 'дата попередньої атсетації', 'дата настпуної атестації']
-        return excel.make_response_from_query_sets(query_set, column_names, "xlsx")
+        return FiveYearsPlanUtils.get_five_years_plan_document()
 
 
 class GetTeachersCurrentYearAttestation(Resource):

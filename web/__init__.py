@@ -4,7 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_heroku import Heroku
 from flask_cors import CORS
-import flask_excel as excel
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -14,7 +13,6 @@ db = SQLAlchemy(app)
 flask_bcrypt = Bcrypt(app)
 heroku = Heroku(app)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
-excel.init_excel(app)
 
 from web.service.utils import CustomJSONEncoder  # uses User model -> local import
 app.json_encoder = CustomJSONEncoder
