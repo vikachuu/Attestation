@@ -4,9 +4,9 @@ from web import db
 
 
 class STATUS(enum.Enum):  # TODO: change enum
-    IN_PROGRESS = "in progress"
-    CONFIRMED = "confirmed"
-    REJECTED = "rejected"
+    IN_PROGRESS = "на розгляді"
+    CONFIRMED = "підтверджено"
+    REJECTED = "відхилено"
 
 
 class ExtraApplication(db.Model):
