@@ -15,17 +15,6 @@ class TeacherAnalyticsUtils:
         return jsonify([dict(row) for row in result])
 
     @staticmethod
-    def get_five_years_plan_document():
-        sql = """
-        SELECT surname AS "прізвище", name AS "ім'я", middle_name AS "по-батькові", qualification_category AS "категорія", 
-        rank AS "звання", previous_attestation_date AS "дата попередньої атсетації", 
-        next_attestation_date AS "дата настпуної атестації"
-        FROM teacher;
-        """
-        result = db.engine.execute(sql)
-        return result.fetchall()
-
-    @staticmethod
     def count_subjects_teachers():
         sql = """
         SELECT subject.subject_name, COUNT(teacher_subject.personnel_number)
@@ -55,7 +44,7 @@ class TeacherAnalyticsUtils:
 
     @staticmethod
     def get_teachers_current_year_attestation():
-        current_year = datetime.now().year
+        current_year = datetime.now().year if datetime.now().month < 5 else datetime.now().year + 1
         sql = """
         SELECT *
         FROM teacher
