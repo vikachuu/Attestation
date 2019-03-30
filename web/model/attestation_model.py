@@ -34,7 +34,7 @@ class Attestation(db.Model):
         self.rank_conclusion = RANK[rank_conclusion].value if rank_conclusion else None
         self.on_category = CATEGORY[on_category].value
         self.on_rank = RANK[on_rank].value if on_rank else None
-        self.previous_category = TeacherUtils.get_category_by_personnel_number(self.personnel_number)
-        self.previous_rank = TeacherUtils.get_rank_by_personnel_number(self.personnel_number)
+        self.previous_category = TeacherUtils.get_category_by_personnel_number(personnel_number)
+        self.previous_rank = TeacherUtils.get_rank_by_personnel_number(personnel_number)
 
         self.personnel_number = personnel_number

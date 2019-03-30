@@ -180,9 +180,7 @@ class TeacherUtils:
         WHERE personnel_number=%s;
         """
         result = db.engine.execute(sql, (personnel_number,))
-        category = [dict(row) for row in result]
-        # return jsonify(category[0])
-        return category[0]["category"]
+        return result.fetchall()[0][0]
 
     @staticmethod
     def get_rank_by_personnel_number(personnel_number):
@@ -192,9 +190,7 @@ class TeacherUtils:
         WHERE personnel_number=%s;
         """
         result = db.engine.execute(sql, (personnel_number,))
-        category = [dict(row) for row in result]
-        # return jsonify(category[0])
-        return category[0]["category"]
+        return result.fetchall()[0][0]
 
     @staticmethod
     def get_next_attestation_date_by_id(personnel_number):
@@ -236,3 +232,15 @@ class TeacherUtils:
         """
         db.engine.execute(sql, (next_attestation_date, personnel_number))
         return {"message": "successfully updated"}
+
+    @staticmethod
+    def update_teacher_after_attestation(personnel_number, new_category, new_rank, new_prev_date, new_next_date):
+        sql = """
+        UPDATE teacher
+        SET qualification_category=%s, rank=%s, previous_attestation_date=%s, next_attestation_date=%s
+        WHERE personnel_number=%s;
+        """
+        update_with = (CATEGORY[new_category].value, RANK[new_rank].value, new_prev_date, new_next_date,
+                       personnel_number)
+        db.engine.execute(sql, update_with)
+        return {"message": "successfully updated teacher after attestation"}
