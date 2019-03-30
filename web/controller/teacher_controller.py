@@ -57,6 +57,10 @@ class TeacherById(Resource):
         CreateTeacher.create_teacher_subjects(put_data)
         return TeacherUtils.update_teacher_by_id(teacher_id, put_data)
 
+    def patch(self, teacher_id):
+        patch_data = request.get_json()
+        return TeacherUtils.update_teacher_next_attestation_year(teacher_id, patch_data['next_attestation_date'])
+
 
 class GetAllTeachers(Resource):
 

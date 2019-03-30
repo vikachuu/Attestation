@@ -197,7 +197,18 @@ class TeacherUtils:
         return category[0]["category"]
 
     @staticmethod
-    def get_all_teachers_with_courses(personnel_number):
+    def get_next_attestation_date_by_id(personnel_number):
+        sql = """
+        SELECT next_attestation_date
+        FROM teacher
+        WHERE personnel_number=%s;
+        """
+        result = db.engine.execute(sql, (personnel_number,))
+        year = [dict(row) for row in result]
+        return year[0]["next_attestation_date"]
+
+    @staticmethod
+    def get_all_teachers_with_courses():
         sql = """
         SELECT T.personnel_number, T.surname, T.name, T.middle_name, C.referral_number, C.proff_course_start_date, 
         C.proff_course_end_date, C.sertificate, C.selective_courses
@@ -215,3 +226,13 @@ class TeacherUtils:
         """
         result = db.engine.execute(sql)
         return jsonify([dict(row) for row in result])
+
+    @staticmethod
+    def update_teacher_next_attestation_year(personnel_number, next_attestation_date):
+        sql = """
+        UPDATE teacher
+        SET next_attestation_date=%s
+        WHERE personnel_number=%s;
+        """
+        db.engine.execute(sql, (next_attestation_date, personnel_number))
+        return {"message": "successfully updated"}
