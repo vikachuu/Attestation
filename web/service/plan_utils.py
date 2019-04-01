@@ -130,8 +130,10 @@ class FiveYearsPlanUtils:
             elif next_att == datetime.now().year + 5 and datetime.now().month > 5:
                 a, c = ('J{}'.format(j), 'I{}'.format(j))
 
-            ws[a].value = 'A'  # attestation
-            ws[c].value = 'K'  # courses
+            if a and c:  # in 5 years
+                ws[a].value = 'A'  # attestation
+                ws[c].value = 'K'  # courses
+
             j += 1
 
         # set borders for all cells
