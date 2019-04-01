@@ -44,7 +44,7 @@ class TeacherAnalyticsUtils:
 
     @staticmethod
     def get_teachers_current_year_attestation():
-        current_year = datetime.now().year if datetime.now().month < 5 else datetime.now().year + 1
+        current_year = datetime.now().year if datetime.now().month < 6 else datetime.now().year + 1
         sql = """
         SELECT *
         FROM teacher
