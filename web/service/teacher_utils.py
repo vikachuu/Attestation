@@ -240,7 +240,7 @@ class TeacherUtils:
         SET qualification_category=%s, rank=%s, previous_attestation_date=%s, next_attestation_date=%s
         WHERE personnel_number=%s;
         """
-        update_with = (CATEGORY[new_category].value, RANK[new_rank].value, new_prev_date, new_next_date,
-                       personnel_number)
+        update_with = (CATEGORY[new_category].value, RANK[new_rank].value if new_rank else None, new_prev_date,
+                       new_next_date, personnel_number)
         db.engine.execute(sql, update_with)
         return {"message": "successfully updated teacher after attestation"}
