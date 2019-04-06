@@ -42,14 +42,17 @@ class Teacher(db.Model):
     degree = db.Column(db.String(100), nullable=True)
     avatar_url = db.Column(db.String(1000), nullable=True)
 
-    user = db.relationship("User", back_populates="teacher", uselist=False)
+    user = db.relationship("User", back_populates="teacher", uselist=False, cascade="all, delete", passive_deletes=True)
     attestation = db.relationship("Attestation", back_populates="teacher")
-    teacher_subject = db.relationship("TeacherSubject", back_populates="teacher")
+    teacher_subject = db.relationship("TeacherSubject", back_populates="teacher", cascade="all, delete", passive_deletes=True)
 
-    extra_application = db.relationship("ExtraApplication", back_populates="teacher")
-    deferment_application = db.relationship("DefermentApplication", back_populates="teacher")
+    extra_application = db.relationship("ExtraApplication", back_populates="teacher", cascade="all, delete",
+                                        passive_deletes=True)
+    deferment_application = db.relationship("DefermentApplication", back_populates="teacher", cascade="all, delete",
+                                            passive_deletes=True)
 
-    referral_to_courses = db.relationship("ReferralToCourses", back_populates="teacher")
+    referral_to_courses = db.relationship("ReferralToCourses", back_populates="teacher", cascade="all, delete",
+                                          passive_deletes=True)
 
     def __init__(self, personnel_number, employment_history, surname, name, middle_name, birth_date,
                  educational_institution, specialty, accreditation_level, graduation_year, position, experience,

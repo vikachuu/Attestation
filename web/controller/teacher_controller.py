@@ -1,5 +1,6 @@
 from flask import request
 from flask_restful import Resource
+from sqlalchemy.exc import IntegrityError
 
 from web.service.authorization_utils import Register
 from web.service.subject_utils import TeacherSubjectUtils
@@ -48,7 +49,11 @@ class TeacherById(Resource):
         return TeacherUtils.get_teacher_by_id(teacher_id)
 
     def delete(self, teacher_id):
-        return TeacherUtils.delete_teacher_by_id(teacher_id)
+        try:
+            response = TeacherUtils.delete_teacher_by_id(teacher_id)
+        except IntegrityError as e:
+            return "Cannot delete teacher while his attestation present\nError: {}".format(e), 400
+        return response
 
     def put(self, teacher_id):
         put_data = request.get_json()
