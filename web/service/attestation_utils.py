@@ -63,3 +63,12 @@ class AttestationUtils:
         """
         result = db.engine.execute(sql, (year, year))
         return jsonify([dict(row) for row in result])
+
+    @staticmethod
+    def delete_attestation_by_id(attestation_number):
+        sql = """
+        DELETE FROM attestation
+        WHERE attestation_number=%s;
+        """
+        db.engine.execute(sql, (attestation_number,))
+        return {"message": "successfully deleted attestation"}

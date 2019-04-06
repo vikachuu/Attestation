@@ -29,3 +29,7 @@ class Attestation(Resource):
         return AttestationUtils.get_all_attestations_with_teachers(filters.get('year'))
 
 
+class AttestationById(Resource):
+
+    def delete(self, attestation_number):
+        return AttestationUtils.delete_attestation_by_id(attestation_number)

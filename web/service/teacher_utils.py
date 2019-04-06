@@ -85,8 +85,6 @@ class TeacherUtils:
 
     @staticmethod
     def delete_teacher_by_id(personnel_number):
-        # db.session.query(Teacher).filter(Teacher.personnel_number == personnel_number).delete()
-        # db.session.commit()
         sql = """
         DELETE FROM teacher
         WHERE personnel_number=%s;
