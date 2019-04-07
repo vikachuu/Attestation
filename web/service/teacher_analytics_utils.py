@@ -52,3 +52,15 @@ class TeacherAnalyticsUtils:
         """
         result = db.engine.execute(sql, (current_year,))
         return jsonify([dict(row) for row in result])
+
+    @staticmethod
+    def count_teachers_extra_applications():
+        sql = """
+        SELECT T.personnel_number, T.surname, T.name, T.middle_name, COUNT(EA.extra_application_number)
+        FROM teacher AS T
+        LEFT OUTER JOIN extra_application AS EA
+        ON T.personnel_number = EA.personnel_number
+        GROUP BY T.personnel_number, T.surname, T.name, T.middle_name;
+        """
+        result = db.engine.execute(sql)
+        return jsonify([dict(row) for row in result])
