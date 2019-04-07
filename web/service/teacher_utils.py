@@ -94,7 +94,7 @@ class TeacherUtils:
         array_agg(json_build_object('subject_id', S.subject_id, 'department', S.department, 
                     'subject_name', S.subject_name)) END AS subjects
         FROM teacher AS T
-        INNER JOIN (SELECT R.referral_number, R.proff_course_start_date, R.proff_course_end_date, R.sertificate, 
+        LEFT OUTER JOIN (SELECT R.referral_number, R.proff_course_start_date, R.proff_course_end_date, R.sertificate, 
                                 R.personnel_number,
                                 CASE WHEN COUNT(R.referral_number) = 0 THEN ARRAY[]::jsonb[] ELSE
                                 array_agg(jsonb_build_object('date_of_course_id', S.date_of_course_id, 
