@@ -72,3 +72,18 @@ class AttestationUtils:
         """
         db.engine.execute(sql, (attestation_number,))
         return {"message": "successfully deleted attestation"}
+
+    @staticmethod
+    def get_latest_attestation_for_teacher(personnel_number):
+        sql = """
+        SELECT A.attestation_number, A.attestation_date, A.attestation_letter, A.characteristic, A.category_conclusion, 
+        A.rank_conclusion, A.on_category, A.on_rank, A.previous_category, A.previous_rank, A.personnel_number, 
+        T.surname, T.name
+        FROM attestation AS A 
+        INNER JOIN teacher AS T ON T.personnel_number = A.personnel_number
+        WHERE T.personnel_number = %s
+        ORDER BY A.attestation_date DESC
+        LIMIT 1;
+        """
+        result = db.engine.execute(sql, (personnel_number,))
+        return jsonify([dict(row) for row in result])

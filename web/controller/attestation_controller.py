@@ -33,3 +33,8 @@ class AttestationById(Resource):
 
     def delete(self, attestation_number):
         return AttestationUtils.delete_attestation_by_id(attestation_number)
+
+
+class AttestationByTeacherId(Resource):
+    def get(self, personnel_number):
+        return AttestationUtils.get_latest_attestation_for_teacher(personnel_number)

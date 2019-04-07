@@ -20,7 +20,7 @@ app.json_encoder = CustomJSONEncoder
 from web.controller.login_controller import UserLogin, UserRegister
 from web.controller.user_controller import UserController, TeacherUserProfile
 from web.controller.teacher_controller import CreateTeacher, TeacherById, GetAllTeachers, GetFilteredTeachers
-from web.controller.attestation_controller import Attestation, AttestationById
+from web.controller.attestation_controller import Attestation, AttestationById, AttestationByTeacherId
 from web.controller.subject_controller import CreateSubject, CreateTeacherSubject, TeacherSubjectByTeacherId
 from web.controller.analytics_controller import CountSubjectTeachers, GetTeachersAllSubjectsOfDepartment, \
     CreateFiveYearsPlan, GetTeachersCurrentYearAttestation, CreateFiveYearsPlanDocument, CountTeacherExtraApplications
@@ -44,6 +44,7 @@ api.add_resource(GetFilteredTeachers, '/api/teachers/filtered', endpoint='teache
 # Attestation
 api.add_resource(Attestation, '/api/attestation', endpoint='attestation')
 api.add_resource(AttestationById, '/api/attestation/<attestation_number>', endpoint='attestation/<attestation_number>')
+api.add_resource(AttestationByTeacherId, '/api/attestation/<personnel_number>', endpoint='attestation/<personnel_number>')
 
 # Profile
 api.add_resource(TeacherUserProfile, '/api/profile', endpoint='profile')
