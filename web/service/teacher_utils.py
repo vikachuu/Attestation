@@ -113,7 +113,9 @@ class TeacherUtils:
         GROUP BY T.personnel_number, T.employment_history, T.surname, T.name, T.middle_name, T.birth_date, 
         T.educational_institution, T.specialty, T.accreditation_level, T.graduation_year, T.position, T.experience, 
         T.qualification_category, T.rank, T.previous_attestation_date, T.next_attestation_date, T.degree, T.avatar_url, 
-        C.referral_number, C.proff_course_start_date, C.proff_course_end_date, C.sertificate, C.selective_courses;
+        C.referral_number, C.proff_course_start_date, C.proff_course_end_date, C.sertificate, C.selective_courses
+        ORDER BY proff_course_start_date DESC
+        LIMIT 1;
         """
         result = db.engine.execute(sql, (personnel_number,))
         teacher = [dict(row) for row in result]
