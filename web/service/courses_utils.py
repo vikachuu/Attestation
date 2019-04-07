@@ -111,3 +111,39 @@ class CoursesUtils:
         """
         result = db.engine.execute(sql)
         return jsonify([dict(row) for row in result])
+
+    @staticmethod
+    def get_all_teachers_of_subject_with_courses(filters):
+        subject = filters.get('subject')
+        sql = """
+            SELECT T.personnel_number, T.surname, T.name, T.middle_name, C.referral_number, C.proff_course_start_date, 
+            C.proff_course_end_date, C.sertificate, C.selective_courses,
+            CASE WHEN COUNT(S.subject_id) = 0 THEN ARRAY[]::json[] ELSE
+            array_agg(json_build_object('subject_id', S.subject_id, 'department', S.department, 
+                        'subject_name', S.subject_name)) END AS subjects
+            FROM teacher AS T
+            LEFT OUTER JOIN (SELECT R.referral_number, R.proff_course_start_date, R.proff_course_end_date, R.sertificate, 
+                                    R.personnel_number,
+                                    CASE WHEN COUNT(R.referral_number) = 0 THEN ARRAY[]::jsonb[] ELSE
+                                    array_agg(jsonb_build_object('date_of_course_id', S.date_of_course_id, 
+                                    'date_of_course', S.date_of_course)) END AS selective_courses
+                              FROM referral_to_courses AS R
+                              LEFT OUTER JOIN selective_course_date AS S ON R.referral_number = S.referral_number
+                              GROUP BY R.referral_number, R.proff_course_start_date, R.proff_course_end_date, 
+                                       R.sertificate) AS C
+
+            ON T.personnel_number = C.personnel_number
+            
+            LEFT OUTER JOIN teacher_subject AS TS ON T.personnel_number = TS.personnel_number
+            LEFT OUTER JOIN subject AS S ON S.subject_id = TS.subject_id
+            
+            WHERE (%s IS NULL OR  EXISTS (SELECT *
+                                            FROM teacher AS T2
+                                            LEFT OUTER JOIN teacher_subject AS TS2 ON T2.personnel_number = TS2.personnel_number
+                                            LEFT OUTER JOIN subject AS S2 ON S2.subject_id = TS2.subject_id
+                                            WHERE TS2.personnel_number=T.personnel_number AND S2.subject_name=%s))
+            GROUP BY T.personnel_number, T.surname, T.name, T.middle_name, C.referral_number, C.proff_course_start_date, 
+                        C.proff_course_end_date, C.sertificate, C.selective_courses;
+            """
+        result = db.engine.execute(sql, (subject, subject))
+        return jsonify([dict(row) for row in result])

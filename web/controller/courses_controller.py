@@ -41,3 +41,8 @@ class ReferralToCoursesById(Resource):
 class AllTeachersWithCourses(Resource):
     def get(self):
         return CoursesUtils.get_all_teachers_with_courses()
+
+
+class AllTeachersSubjectsWithCourses(Resource):
+    def get(self):
+        return CoursesUtils.get_all_teachers_of_subject_with_courses(request.args)
