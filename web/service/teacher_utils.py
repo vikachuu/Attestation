@@ -84,6 +84,49 @@ class TeacherUtils:
             return response_object
 
     @staticmethod
+    def get_teacher_by_id_with_courses(personnel_number):
+        sql = """
+        SELECT T.personnel_number, T.employment_history, T.surname, T.name, T.middle_name, T.birth_date, 
+        T.educational_institution, T.specialty, T.accreditation_level, T.graduation_year, T.position, T.experience, 
+        T.qualification_category, T.rank, T.previous_attestation_date, T.next_attestation_date, T.degree, T.avatar_url, 
+        C.referral_number, C.proff_course_start_date, C.proff_course_end_date, C.sertificate, C.selective_courses,
+        CASE WHEN COUNT(S.subject_id) = 0 THEN ARRAY[]::json[] ELSE
+        array_agg(json_build_object('subject_id', S.subject_id, 'department', S.department, 
+                    'subject_name', S.subject_name)) END AS subjects
+        FROM teacher AS T
+        INNER JOIN (SELECT R.referral_number, R.proff_course_start_date, R.proff_course_end_date, R.sertificate, 
+                                R.personnel_number,
+                                CASE WHEN COUNT(R.referral_number) = 0 THEN ARRAY[]::jsonb[] ELSE
+                                array_agg(jsonb_build_object('date_of_course_id', S.date_of_course_id, 
+                                'date_of_course', S.date_of_course)) END AS selective_courses
+                          FROM referral_to_courses AS R
+                          LEFT OUTER JOIN selective_course_date AS S ON R.referral_number = S.referral_number
+                          GROUP BY R.referral_number, R.proff_course_start_date, R.proff_course_end_date, 
+                                    R.sertificate) AS C
+
+        ON T.personnel_number = C.personnel_number
+
+        LEFT OUTER JOIN teacher_subject AS TS ON T.personnel_number = TS.personnel_number
+        LEFT OUTER JOIN subject AS S ON S.subject_id = TS.subject_id
+
+        WHERE T.personnel_number=%s
+        GROUP BY T.personnel_number, T.employment_history, T.surname, T.name, T.middle_name, T.birth_date, 
+        T.educational_institution, T.specialty, T.accreditation_level, T.graduation_year, T.position, T.experience, 
+        T.qualification_category, T.rank, T.previous_attestation_date, T.next_attestation_date, T.degree, T.avatar_url, 
+        C.referral_number, C.proff_course_start_date, C.proff_course_end_date, C.sertificate, C.selective_courses;
+        """
+        result = db.engine.execute(sql, (personnel_number,))
+        teacher = [dict(row) for row in result]
+        if teacher:
+            return jsonify(teacher[0])
+        else:
+            response_object = {
+                'status': 'fail',
+                'message': 'No teacher exists with such id.',
+            }
+            return response_object
+
+    @staticmethod
     def delete_teacher_by_id(personnel_number):
         sql = """
         DELETE FROM teacher

@@ -46,7 +46,7 @@ class CreateTeacher(Resource):
 class TeacherById(Resource):
 
     def get(self, teacher_id):
-        return TeacherUtils.get_teacher_by_id(teacher_id)
+        return TeacherUtils.get_teacher_by_id_with_courses(teacher_id)
 
     def delete(self, teacher_id):
         try:
