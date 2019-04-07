@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from flask import jsonify
+
 from web import db
 from web.model.courses_models import ReferralToCourses, SelectiveCourseDate
 
@@ -9,6 +11,7 @@ class CoursesUtils:
     def create_referral_to_courses(data):
         referral = ReferralToCourses.query.filter_by(personnel_number=data.get('personnel_number'),
                                                      sertificate=False).first()
+        # TODO: check if teacher exists
         if not referral:
             referral = ReferralToCourses(
                 referral_number=data.get('referral_number'),
@@ -61,10 +64,10 @@ class CoursesUtils:
         return {"message": "successfully deleted referral"}
 
     @staticmethod
-    def create_date_of_course(data):
+    def create_date_of_course(data, referral_number):
         selective_course_date = SelectiveCourseDate(
             date_of_course=data.get('date_of_course'),
-            referral_number=data.get('referral_number')
+            referral_number=referral_number
         )
 
         db.session.add(selective_course_date)
@@ -74,3 +77,37 @@ class CoursesUtils:
             'message': 'Successfully created date of course.'
         }
         return response_object, 200
+
+    @staticmethod
+    def update_date_of_course(update, course_id, referral_number):
+        date_of_course = datetime.strptime(update.get('date_of_course'), '%Y-%m-%d').date()
+
+        sql = """
+        UPDATE selective_course_date
+        SET date_of_course=%s, referral_number=%s
+        WHERE date_of_course_id=%s;
+        """
+        update_with = (date_of_course, referral_number, course_id)
+        db.engine.execute(sql, update_with)
+        return {"message": "successfully updated date of course"}
+
+    @staticmethod
+    def get_all_teachers_with_courses():
+        sql = """
+        SELECT T.personnel_number, T.surname, T.name, T.middle_name, C.referral_number, C.proff_course_start_date, 
+        C.proff_course_end_date, C.sertificate, C.selective_courses
+        FROM teacher AS T
+        LEFT OUTER JOIN (SELECT R.referral_number, R.proff_course_start_date, R.proff_course_end_date, R.sertificate, 
+                                R.personnel_number,
+                                CASE WHEN COUNT(R.referral_number) = 0 THEN ARRAY[]::json[] ELSE
+                                array_agg(json_build_object('date_of_course_id', S.date_of_course_id, 
+                                'date_of_course', S.date_of_course)) END AS selective_courses
+                          FROM referral_to_courses AS R
+                          LEFT OUTER JOIN selective_course_date AS S ON R.referral_number = S.referral_number
+                          GROUP BY R.referral_number, R.proff_course_start_date, R.proff_course_end_date, 
+                                   R.sertificate) AS C
+
+        ON T.personnel_number = C.personnel_number;
+        """
+        result = db.engine.execute(sql)
+        return jsonify([dict(row) for row in result])

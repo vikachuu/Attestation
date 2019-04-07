@@ -204,26 +204,6 @@ class TeacherUtils:
         return year[0]["next_attestation_date"]
 
     @staticmethod
-    def get_all_teachers_with_courses():
-        sql = """
-        SELECT T.personnel_number, T.surname, T.name, T.middle_name, C.referral_number, C.proff_course_start_date, 
-        C.proff_course_end_date, C.sertificate, C.selective_courses
-        FROM teacher AS T
-        LEFT OUTER JOIN (SELECT R.referral_number, R.proff_course_start_date, R.proff_course_end_date, R.sertificate, 
-                                CASE WHEN COUNT(R.referral_number) = 0 THEN ARRAY[]::json[] ELSE
-                                array_agg(json_build_object('date_of_course_id', S.date_of_course_id, 
-                                'date_of_course', S.date_of_course)) END AS selective_courses
-                          FROM referral_to_courses AS R
-                          LEFT OUTER JOIN selective_course_date AS S ON R.referral_number = S.referral_number
-                          GROUP BY R.referral_number, R.proff_course_start_date, R.proff_course_end_date, 
-                                   R.sertificate) AS C
-        
-        ON T.personnel_number = C.personnel_number;
-        """
-        result = db.engine.execute(sql)
-        return jsonify([dict(row) for row in result])
-
-    @staticmethod
     def update_teacher_next_attestation_year(personnel_number, next_attestation_date):
         sql = """
         UPDATE teacher

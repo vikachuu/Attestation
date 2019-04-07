@@ -26,7 +26,7 @@ from web.controller.analytics_controller import CountSubjectTeachers, GetTeacher
     CreateFiveYearsPlan, GetTeachersCurrentYearAttestation, CreateFiveYearsPlanDocument
 from web.controller.applications_controller import ExtraApplication, ExtraApplicationById, CountExtraApplications, \
     DefermentApplication, DefermentApplicationById, CountDefermentApplications
-from web.controller.courses_controller import CreateCourses, ReferralToCoursesById, CreateDateOfCourse
+from web.controller.courses_controller import CreateCourses, ReferralToCoursesById, AllTeachersWithCourses
 
 # User
 api.add_resource(UserController, '/api/user', endpoint='user')  # TODO: delete endpoint
@@ -74,7 +74,7 @@ api.add_resource(DefermentApplicationById, '/api/application/deferment/<applicat
 # Courses
 api.add_resource(CreateCourses, '/api/courses', endpoint='courses')
 api.add_resource(ReferralToCoursesById, '/api/courses/<referral_id>', endpoint='courses/<referral_id>')
-api.add_resource(CreateDateOfCourse, '/api/selective_course', endpoint='selective_course')
+api.add_resource(AllTeachersWithCourses, '/api/courses/teachers', endpoint='courses/teachers')
 
 
 @app.route("/")
