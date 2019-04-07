@@ -27,3 +27,8 @@ class CreateFiveYearsPlanDocument(Resource):
 class GetTeachersCurrentYearAttestation(Resource):
     def get(self):
         return TeacherAnalyticsUtils.get_teachers_current_year_attestation()
+
+
+class CountTeacherExtraApplications(Resource):
+    def get(self):
+        return TeacherAnalyticsUtils.count_teachers_extra_applications()

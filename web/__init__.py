@@ -23,7 +23,7 @@ from web.controller.teacher_controller import CreateTeacher, TeacherById, GetAll
 from web.controller.attestation_controller import Attestation, AttestationById
 from web.controller.subject_controller import CreateSubject, CreateTeacherSubject, TeacherSubjectByTeacherId
 from web.controller.analytics_controller import CountSubjectTeachers, GetTeachersAllSubjectsOfDepartment, \
-    CreateFiveYearsPlan, GetTeachersCurrentYearAttestation, CreateFiveYearsPlanDocument
+    CreateFiveYearsPlan, GetTeachersCurrentYearAttestation, CreateFiveYearsPlanDocument, CountTeacherExtraApplications
 from web.controller.applications_controller import ExtraApplication, ExtraApplicationById, CountExtraApplications, \
     DefermentApplication, DefermentApplicationById, CountDefermentApplications
 from web.controller.courses_controller import CreateCourses, ReferralToCoursesById, AllTeachersWithCourses, \
@@ -58,6 +58,8 @@ api.add_resource(TeacherSubjectByTeacherId, '/api/teachersubject/<teacher_id>', 
 api.add_resource(CountSubjectTeachers, '/api/analytics/count_subject_teachers', endpoint='analytics/count_subject_teachers')
 api.add_resource(GetTeachersCurrentYearAttestation, '/api/analytics/current_year_attestation', endpoint='analytics/current_year_attestation')
 api.add_resource(GetTeachersAllSubjectsOfDepartment, '/api/analytics/all_subjects_dep', endpoint='analytics/all_subjects_dep')
+
+api.add_resource(CountTeacherExtraApplications, '/api/analytics/count_extra_app', endpoint='analytics/count_extra_app')
 
 # Attestation plan
 api.add_resource(CreateFiveYearsPlan, '/api/analytics/plan', endpoint='analytics/plan')
