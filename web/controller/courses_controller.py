@@ -30,8 +30,9 @@ class ReferralToCoursesById(Resource):
             return {"message": "number of selective courses should be 5."}, 400
 
         referral_update_response = CoursesUtils.update_referral_to_courses_by_id(put_data, referral_id)
-        for course in selective_courses:
-            CoursesUtils.update_date_of_course(course, course.get('date_of_course_id'), referral_id)
+        if referral_update_response[1] == 200:
+            for course in selective_courses:
+                CoursesUtils.update_date_of_course(course, course.get('date_of_course_id'), referral_id)
 
         return referral_update_response
 
