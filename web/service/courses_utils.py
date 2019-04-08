@@ -9,6 +9,13 @@ from web.model.courses_models import ReferralToCourses, SelectiveCourseDate
 class CoursesUtils:
     @staticmethod
     def create_referral_to_courses(data):
+        referral = ReferralToCourses.query.filter_by(referral_number=data.get('referral_number')).first()
+        if referral:
+            response_object = {
+                'status': 'fail',
+                'message': 'Referral with such referral number exists.'
+            }
+            return response_object, 400
         referral = ReferralToCourses.query.filter_by(personnel_number=data.get('personnel_number'),
                                                      sertificate=False).first()
         # TODO: check if teacher exists

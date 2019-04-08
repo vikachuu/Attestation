@@ -15,8 +15,9 @@ class CreateCourses(Resource):
             return {"message": "number of selective courses should be 5."}, 400
 
         referral_response = CoursesUtils.create_referral_to_courses(post_data)
-        for course in selective_courses:
-            CoursesUtils.create_date_of_course(course, referral_number)
+        if referral_response[1] == 200:
+            for course in selective_courses:
+                CoursesUtils.create_date_of_course(course, referral_number)
 
         return referral_response
 
