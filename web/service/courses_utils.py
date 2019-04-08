@@ -59,7 +59,7 @@ class CoursesUtils:
                        update.get('sertificate'), update.get('personnel_number'),
                        referral_id)
         db.engine.execute(sql, update_with)
-        return {"message": "successfully updated"}
+        return {"message": "successfully updated"}, 200
 
     @staticmethod
     def delete_referral_to_courses_by_id(referral_id):
